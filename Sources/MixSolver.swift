@@ -19,6 +19,11 @@ struct MixRecipe: Identifiable {
     var fractionSum: Double {
         entries.reduce(0) { $0 + $1.fraction }
     }
+
+    /// 硫化物を含む色（N 印）が入っているか。混色の注意を出すのに使う。
+    var hasSulfide: Bool {
+        entries.contains { $0.paint.isSulfide }
+    }
 }
 
 /// 計算用に前処理した絵具。吸収 K は散乱 S を掛けた値で持つ。
@@ -33,7 +38,9 @@ struct MixPigment {
 ///
 /// 1 色・2 色・3 色の組み合わせを 10% 刻みで総当たりし、
 /// 予測色と目標色の CIEDE2000 色差が小さい順に上位を返す。
-/// 1 パレット（18 色）で約 3 万通りの評価。
+/// 色が 24 色までは総当たり（18 色で約 3 万通り）。
+/// カタログ全色（111 色）では 3 色の組み合わせが 23 万通り・評価が 850 万通りに
+/// なるため、Lab 空間で目標色に近い組を先に絞ってから混色を計算する。
 enum MixSolver {
     static func pigments(for paints: [Paint]) -> [MixPigment] {
         paints.map { paint in
@@ -136,6 +143,15 @@ private final class SolverCore {
     private var candidates: [Candidate] = []
     private let capacity = 24
 
+    /// これ以下の色数なら、2 色・3 色の組み合わせをすべて試す。
+    private let exhaustiveLimit = 24
+    /// 色が多いときに残す組み合わせの数。
+    private let pairKeep = 480
+    private let tripleKeep = 500
+    /// 混色は 3 色の Lab の平均より暗く出るので、目標色を持ち上げた位置からも
+    /// 三角形までの距離を見て、取りこぼしを減らす。
+    private let tripleLifts: [Double] = [0, 8, 16]
+
     init(target: LabColor, pigments: [MixPigment]) {
         self.target = target
         self.pigments = pigments
@@ -150,29 +166,37 @@ private final class SolverCore {
         }
 
         if maxPaints >= 2 {
-            for first in 0..<pigments.count {
-                for second in (first + 1)..<pigments.count {
+            if pigments.count <= exhaustiveLimit {
+                for first in 0..<pigments.count {
+                    for second in (first + 1)..<pigments.count {
+                        for step in 1...9 {
+                            let fraction = Double(step) / 10
+                            offer(indices: [first, second], fractions: [fraction, 1 - fraction])
+                        }
+                    }
+                }
+            } else {
+                for pair in closestPairs() {
                     for step in 1...9 {
                         let fraction = Double(step) / 10
-                        offer(indices: [first, second], fractions: [fraction, 1 - fraction])
+                        offer(indices: [pair.0, pair.1], fractions: [fraction, 1 - fraction])
                     }
                 }
             }
         }
 
         if maxPaints >= 3 {
-            for first in 0..<pigments.count {
-                for second in (first + 1)..<pigments.count {
-                    for third in (second + 1)..<pigments.count {
-                        for a in 1...8 {
-                            for b in 1...(10 - a) {
-                                let c = 10 - a - b
-                                guard c >= 1 else { continue }
-                                offer(indices: [first, second, third],
-                                      fractions: [Double(a) / 10, Double(b) / 10, Double(c) / 10])
-                            }
+            if pigments.count <= exhaustiveLimit {
+                for first in 0..<pigments.count {
+                    for second in (first + 1)..<pigments.count {
+                        for third in (second + 1)..<pigments.count {
+                            offerTriple(first, second, third)
                         }
                     }
+                }
+            } else {
+                for triple in closestTriples() {
+                    offerTriple(triple.0, triple.1, triple.2)
                 }
             }
         }
@@ -196,6 +220,17 @@ private final class SolverCore {
             if recipes.count == limit { break }
         }
         return recipes
+    }
+
+    private func offerTriple(_ first: Int, _ second: Int, _ third: Int) {
+        for a in 1...8 {
+            for b in 1...(10 - a) {
+                let c = 10 - a - b
+                guard c >= 1 else { continue }
+                offer(indices: [first, second, third],
+                      fractions: [Double(a) / 10, Double(b) / 10, Double(c) / 10])
+            }
+        }
     }
 
     private func offer(indices: [Int], fractions: [Double]) {
@@ -237,5 +272,167 @@ private final class SolverCore {
             value = value * 1000 + index
         }
         return value
+    }
+
+    // MARK: - 組み合わせの絞り込み
+
+    /// 目標色の Lab に近い順に 2 色の組を選ぶ。
+    /// 混色の結果は 2 色の Lab を結ぶ線の近くに来るので、線分までの距離で順位をつける。
+    private func closestPairs() -> [(Int, Int)] {
+        var best: [(distance: Double, first: Int, second: Int)] = []
+        best.reserveCapacity(pairKeep + 1)
+        for first in pigments.indices {
+            for second in (first + 1)..<pigments.count {
+                let distance = segmentDistance(target, pigments[first].lab, pigments[second].lab)
+                if best.count == pairKeep, let last = best.last, distance >= last.distance {
+                    continue
+                }
+                insert(&best, distance: distance, first: first, second: second, keep: pairKeep)
+            }
+        }
+        return best.map { ($0.first, $0.second) }
+    }
+
+    /// 目標色の Lab に近い順に 3 色の組を選ぶ。
+    /// 混色の結果は 3 色の Lab が作る三角形の近くに来るので、三角形までの距離で順位をつける。
+    /// 減法混色は三角形より暗く出るため、目標色を少し持ち上げた位置からも拾う。
+    private func closestTriples() -> [(Int, Int, Int)] {
+        let count = pigments.count
+        var merged: [Int: (distance: Double, first: Int, second: Int, third: Int)] = [:]
+        for lift in tripleLifts {
+            let point = LabColor(l: target.l + lift, a: target.a, b: target.b)
+            var best: [(distance: Double, first: Int, second: Int, third: Int)] = []
+            best.reserveCapacity(tripleKeep + 1)
+            for first in 0..<count {
+                for second in (first + 1)..<count {
+                    for third in (second + 1)..<count {
+                        let distance = triangleDistance(point, pigments[first].lab, pigments[second].lab,
+                                                        pigments[third].lab)
+                        if best.count == tripleKeep, let last = best.last, distance >= last.distance {
+                            continue
+                        }
+                        insert(&best, distance: distance, first: first, second: second, third: third,
+                               keep: tripleKeep)
+                    }
+                }
+            }
+            for entry in best {
+                let key = entry.first * 1_000_000 + entry.second * 1_000 + entry.third
+                if let existing = merged[key], existing.distance <= entry.distance { continue }
+                merged[key] = entry
+            }
+        }
+        return merged.values
+            .sorted { $0.distance < $1.distance }
+            .map { ($0.first, $0.second, $0.third) }
+    }
+
+    private func insert(_ list: inout [(distance: Double, first: Int, second: Int, third: Int)],
+                        distance: Double, first: Int, second: Int, third: Int, keep: Int) {
+        var low = 0
+        var high = list.count
+        while low < high {
+            let middle = (low + high) / 2
+            if list[middle].distance < distance { low = middle + 1 } else { high = middle }
+        }
+        list.insert((distance, first, second, third), at: low)
+        if list.count > keep { list.removeLast() }
+    }
+
+    private func insert(_ list: inout [(distance: Double, first: Int, second: Int)],
+                        distance: Double, first: Int, second: Int, keep: Int) {
+        var low = 0
+        var high = list.count
+        while low < high {
+            let middle = (low + high) / 2
+            if list[middle].distance < distance { low = middle + 1 } else { high = middle }
+        }
+        list.insert((distance, first, second), at: low)
+        if list.count > keep { list.removeLast() }
+    }
+
+    /// 点から線分までの距離（Lab をそのまま 3 次元として扱う）。
+    private func segmentDistance(_ point: LabColor, _ start: LabColor, _ end: LabColor) -> Double {
+        let ex = end.l - start.l
+        let ey = end.a - start.a
+        let ez = end.b - start.b
+        let px = point.l - start.l
+        let py = point.a - start.a
+        let pz = point.b - start.b
+        let lengthSquared = ex * ex + ey * ey + ez * ez
+        var t = lengthSquared > 0 ? (px * ex + py * ey + pz * ez) / lengthSquared : 0
+        t = min(max(t, 0), 1)
+        let dx = px - ex * t
+        let dy = py - ey * t
+        let dz = pz - ez * t
+        return (dx * dx + dy * dy + dz * dz).squareRoot()
+    }
+
+    /// 点から三角形までの距離（Ericson, Real-Time Collision Detection）。
+    private func triangleDistance(_ point: LabColor,
+                                  _ first: LabColor,
+                                  _ second: LabColor,
+                                  _ third: LabColor) -> Double {
+        let ax = first.l, ay = first.a, az = first.b
+        let bx = second.l, by = second.a, bz = second.b
+        let cx = third.l, cy = third.a, cz = third.b
+        let px = point.l, py = point.a, pz = point.b
+
+        let abx = bx - ax, aby = by - ay, abz = bz - az
+        let acx = cx - ax, acy = cy - ay, acz = cz - az
+        let apx = px - ax, apy = py - ay, apz = pz - az
+
+        let d1 = abx * apx + aby * apy + abz * apz
+        let d2 = acx * apx + acy * apy + acz * apz
+        if d1 <= 0 && d2 <= 0 {
+            return (apx * apx + apy * apy + apz * apz).squareRoot()
+        }
+
+        let bpx = px - bx, bpy = py - by, bpz = pz - bz
+        let d3 = abx * bpx + aby * bpy + abz * bpz
+        let d4 = acx * bpx + acy * bpy + acz * bpz
+        if d3 >= 0 && d4 <= d3 {
+            return (bpx * bpx + bpy * bpy + bpz * bpz).squareRoot()
+        }
+
+        let vc = d1 * d4 - d3 * d2
+        if vc <= 0 && d1 >= 0 && d3 <= 0 {
+            let v = d1 / (d1 - d3)
+            let qx = apx - abx * v, qy = apy - aby * v, qz = apz - abz * v
+            return (qx * qx + qy * qy + qz * qz).squareRoot()
+        }
+
+        let cpx = px - cx, cpy = py - cy, cpz = pz - cz
+        let d5 = abx * cpx + aby * cpy + abz * cpz
+        let d6 = acx * cpx + acy * cpy + acz * cpz
+        if d6 >= 0 && d5 <= d6 {
+            return (cpx * cpx + cpy * cpy + cpz * cpz).squareRoot()
+        }
+
+        let vb = d5 * d2 - d1 * d6
+        if vb <= 0 && d2 >= 0 && d6 <= 0 {
+            let w = d2 / (d2 - d6)
+            let qx = apx - acx * w, qy = apy - acy * w, qz = apz - acz * w
+            return (qx * qx + qy * qy + qz * qz).squareRoot()
+        }
+
+        let va = d3 * d6 - d5 * d4
+        if va <= 0 && (d4 - d3) >= 0 && (d5 - d6) >= 0 {
+            let w = (d4 - d3) / ((d4 - d3) + (d5 - d6))
+            let qx = bpx - (cx - bx) * w
+            let qy = bpy - (cy - by) * w
+            let qz = bpz - (cz - bz) * w
+            return (qx * qx + qy * qy + qz * qz).squareRoot()
+        }
+
+        // 面の内側
+        let denom = va + vb + vc
+        guard abs(denom) > 1e-9 else { return segmentDistance(point, first, second) }
+        let v = vb / denom
+        let w = vc / denom
+        let nx = apx - (abx * v + acx * w)
+        let ny = apy - (aby * v + acy * w)
+        let nz = apz - (abz * v + acz * w)
+        return (nx * nx + ny * ny + nz * nz).squareRoot()
     }
 }

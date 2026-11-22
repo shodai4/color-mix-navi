@@ -10,12 +10,15 @@ struct RecipePanel: View {
     @ObservedObject var pro: ProStore
     let limitedMode: Bool
     let fiveIDs: [Int]
+    let scope: PaletteScope
     let kuwaharaLevel: KuwaharaLevel?
     let gamutOn: Bool
     let isPreparingPreview: Bool
     let onSelectPalette: (PaletteKind) -> Void
+    let onSelectScope: (PaletteScope) -> Void
     let onToggleLimited: () -> Void
-    let onToggleFive: (Int) -> Void
+    let onOpenPalette: () -> Void
+    let onShowPaint: (Paint) -> Void
     let onPreset: (PalettePreset) -> Void
     let onKuwahara: (KuwaharaLevel?) -> Void
     let onGamut: (Bool) -> Void
@@ -29,6 +32,12 @@ struct RecipePanel: View {
         return recipes.first
     }
 
+    /// 5 色の枠。選ばれていない枠は nil。
+    private var slotPaints: [Paint?] {
+        let selected = fiveIDs.compactMap { id in paletteKind.paints.first { $0.id == id } }
+        return (0..<5).map { $0 < selected.count ? selected[$0] : nil }
+    }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
@@ -40,6 +49,11 @@ struct RecipePanel: View {
 
                 paletteTabs
                     .padding(.top, 18)
+
+                if paletteKind == .oil {
+                    scopeRow
+                        .padding(.top, 12)
+                }
 
                 divider
                     .padding(.top, 16)
@@ -189,6 +203,42 @@ struct RecipePanel: View {
         }
     }
 
+    // MARK: - 探す範囲
+
+    private var scopeRow: some View {
+        HStack(spacing: 8) {
+            Text("探す絵具")
+                .font(.system(size: 10))
+                .foregroundStyle(Color.inkSoft)
+
+            ForEach(PaletteScope.allCases) { item in
+                Button {
+                    onSelectScope(item)
+                } label: {
+                    Text(item.label)
+                        .font(.system(size: 10.5, weight: item == scope ? .semibold : .regular))
+                        .foregroundStyle(item == scope ? Color.ink : Color.inkSoft)
+                        .padding(.horizontal, 9)
+                        .padding(.vertical, 4)
+                        .background(
+                            Capsule().fill(item == scope ? Color.white.opacity(0.85) : Color.clear)
+                        )
+                        .overlay(
+                            Capsule().strokeBorder(item == scope ? Color.accent.opacity(0.5) : Color.line,
+                                                   lineWidth: 1)
+                        )
+                }
+                .buttonStyle(.plain)
+            }
+
+            Spacer(minLength: 4)
+
+            Text("\(paletteKind.paints(in: scope).count)色")
+                .font(.system(size: 9.5, design: .monospaced))
+                .foregroundStyle(Color.inkSoft)
+        }
+    }
+
     // MARK: - 5 色で作る
 
     private var fiveSection: some View {
@@ -206,7 +256,9 @@ struct RecipePanel: View {
                 }
             }
 
-            Text("18 色のうち 5 色を選ぶと、その 5 色だけで配合を探します。")
+            Text(limitedMode
+                 ? "選んだ5色だけで配合を探します。色を押すと、乾燥日数や混色の注意を見られます。"
+                 : "カタログの色から5色を選ぶと、その5色だけで配合を探します。")
                 .font(.system(size: 10.5))
                 .foregroundStyle(Color.inkSoft)
                 .fixedSize(horizontal: false, vertical: true)
@@ -235,63 +287,102 @@ struct RecipePanel: View {
                         .foregroundStyle(fiveIDs.count == 5 ? Color.inkSoft : Color.accent)
                 }
 
-                LazyVGrid(columns: [GridItem(.flexible(), spacing: 10),
-                                    GridItem(.flexible(), spacing: 10),
-                                    GridItem(.flexible(), spacing: 10)],
-                          spacing: 8) {
-                    ForEach(paletteKind.paints) { paint in
-                        paintCell(paint)
+                VStack(spacing: 6) {
+                    ForEach(Array(slotPaints.enumerated()), id: \.offset) { index, paint in
+                        slotRow(index: index, paint: paint)
                     }
                 }
                 .padding(.top, 2)
+
+                Button {
+                    onOpenPalette()
+                } label: {
+                    HStack(spacing: 8) {
+                        Text("色を選ぶ")
+                            .font(.system(size: 11.5, weight: .medium))
+                        Text("全\(paletteKind.paints.count)色")
+                            .font(.system(size: 9.5, design: .monospaced))
+                            .foregroundStyle(Color.inkSoft)
+                        Spacer(minLength: 0)
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 10))
+                            .foregroundStyle(Color.inkSoft)
+                    }
+                    .foregroundStyle(Color.ink)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 10)
+                    .background(RoundedRectangle(cornerRadius: 8, style: .continuous).fill(Color.white.opacity(0.6)))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8, style: .continuous)
+                            .strokeBorder(Color.line, lineWidth: 1)
+                    )
+                }
+                .buttonStyle(.plain)
             }
         }
     }
 
-    private func paintCell(_ paint: Paint) -> some View {
-        let order = fiveIDs.firstIndex(of: paint.id)
-        return Button {
-            onToggleFive(paint.id)
-        } label: {
-            HStack(spacing: 6) {
-                RoundedRectangle(cornerRadius: 2, style: .continuous)
-                    .fill(paint.swatchColor)
-                    .frame(width: 14, height: 14)
-                    .overlay(
+    private func slotRow(index: Int, paint: Paint?) -> some View {
+        Group {
+            if let paint {
+                Button {
+                    onShowPaint(paint)
+                } label: {
+                    HStack(spacing: 9) {
+                        Text("\(index + 1)")
+                            .font(.system(size: 9, design: .monospaced))
+                            .foregroundStyle(Color.inkSoft)
+                            .frame(width: 12)
+
                         RoundedRectangle(cornerRadius: 2, style: .continuous)
-                            .strokeBorder(Color.ink.opacity(0.12), lineWidth: 1)
+                            .fill(paint.swatchColor)
+                            .frame(width: 16, height: 16)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 2, style: .continuous)
+                                    .strokeBorder(Color.ink.opacity(0.12), lineWidth: 1)
+                            )
+
+                        Text(paint.name)
+                            .font(.system(size: 11))
+                            .foregroundStyle(Color.ink)
+                            .lineLimit(1)
+
+                        Spacer(minLength: 6)
+
+                        Text(paint.meta?.dryingLabel ?? paint.opacityLabel)
+                            .font(.system(size: 9))
+                            .foregroundStyle(Color.inkSoft)
+                    }
+                    .padding(.horizontal, 9)
+                    .padding(.vertical, 7)
+                    .background(RoundedRectangle(cornerRadius: 6, style: .continuous).fill(Color.white.opacity(0.55)))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 6, style: .continuous)
+                            .strokeBorder(Color.line, lineWidth: 1)
                     )
-
-                Text(paint.name)
-                    .font(.system(size: 10))
-                    .foregroundStyle(order == nil ? Color.inkSoft : Color.ink)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
-
-                Spacer(minLength: 0)
-
-                if let order {
-                    Text("\(order + 1)")
-                        .font(.system(size: 8, weight: .semibold, design: .monospaced))
-                        .foregroundStyle(Color.paper)
-                        .frame(width: 14, height: 14)
-                        .background(Circle().fill(Color.ink.opacity(0.7)))
+                    .contentShape(Rectangle())
                 }
+                .buttonStyle(.plain)
+            } else {
+                HStack(spacing: 9) {
+                    Text("\(index + 1)")
+                        .font(.system(size: 9, design: .monospaced))
+                        .foregroundStyle(Color.inkSoft)
+                        .frame(width: 12)
+                    Text("未選択")
+                        .font(.system(size: 10.5))
+                        .foregroundStyle(Color.inkSoft)
+                    Spacer(minLength: 0)
+                }
+                .padding(.horizontal, 9)
+                .padding(.vertical, 7)
+                .background(RoundedRectangle(cornerRadius: 6, style: .continuous).fill(Color.clear))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 6, style: .continuous)
+                        .strokeBorder(Color.line, style: StrokeStyle(lineWidth: 1, dash: [3, 3]))
+                )
             }
-            .padding(.horizontal, 5)
-            .padding(.vertical, 5)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(
-                RoundedRectangle(cornerRadius: 5, style: .continuous)
-                    .fill(order == nil ? Color.white.opacity(0.28) : Color.white.opacity(0.72))
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 5, style: .continuous)
-                    .strokeBorder(order == nil ? Color.line : Color.accent.opacity(0.5), lineWidth: 1)
-            )
         }
-        .buttonStyle(.plain)
-        .accessibilityLabel(paint.name)
     }
 
     // MARK: - 仕上がり
@@ -400,9 +491,9 @@ struct RecipePanel: View {
             ForEach(Array(recipes.enumerated()), id: \.element.id) { index, recipe in
                 RecipeCard(index: index + 1,
                            recipe: recipe,
-                           selected: recipe.id == selectedRecipeID) {
-                    onSelectRecipe(recipe.id)
-                }
+                           selected: recipe.id == selectedRecipeID,
+                           action: { onSelectRecipe(recipe.id) },
+                           onShowPaint: onShowPaint)
             }
 
             if recipes.isEmpty && !isWorking {
@@ -457,60 +548,110 @@ struct RecipePanel: View {
     }
 }
 
-/// 1 案ぶん。水平分割バーと、絵具ごとの比率。
+/// 1 案ぶん。水平分割バーと、絵具ごとの比率。絵具名を押すと 1 色の詳細を出す。
 struct RecipeCard: View {
     let index: Int
     let recipe: MixRecipe
     let selected: Bool
     let action: () -> Void
+    let onShowPaint: (Paint) -> Void
 
     var body: some View {
-        Button(action: action) {
-            VStack(alignment: .leading, spacing: 10) {
-                HStack(spacing: 10) {
-                    Text(String(format: "%02d", index))
-                        .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(Color.inkSoft)
+        VStack(alignment: .leading, spacing: 10) {
+            Button(action: action) {
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack(spacing: 10) {
+                        Text(String(format: "%02d", index))
+                            .font(.system(size: 10, design: .monospaced))
+                            .foregroundStyle(Color.inkSoft)
 
-                    RecipeBar(entries: recipe.entries)
+                        RecipeBar(entries: recipe.entries)
 
-                    Text(String(format: "ΔE %.1f", recipe.deltaE))
-                        .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(Color.inkSoft)
-                }
+                        Text(String(format: "ΔE %.1f", recipe.deltaE))
+                            .font(.system(size: 10, design: .monospaced))
+                            .foregroundStyle(Color.inkSoft)
+                    }
 
-                VStack(alignment: .leading, spacing: 4) {
-                    ForEach(recipe.entries) { entry in
-                        HStack(spacing: 6) {
-                            Circle()
-                                .fill(entry.paint.swatchColor)
-                                .frame(width: 7, height: 7)
-                            Text(entry.paint.name)
-                                .font(.system(size: 11))
-                                .foregroundStyle(Color.ink)
-                            Text(entry.paint.pigment)
-                                .font(.system(size: 9, design: .monospaced))
-                                .foregroundStyle(Color.inkSoft)
-                            Spacer(minLength: 8)
-                            Text("\(entry.percent)%")
-                                .font(.system(size: 11, design: .monospaced))
-                                .foregroundStyle(Color.ink)
+                    VStack(alignment: .leading, spacing: 4) {
+                        ForEach(recipe.entries) { entry in
+                            HStack(spacing: 6) {
+                                Circle()
+                                    .fill(entry.paint.swatchColor)
+                                    .frame(width: 7, height: 7)
+                                Text(entry.paint.name)
+                                    .font(.system(size: 11))
+                                    .foregroundStyle(Color.ink)
+                                Text(entry.paint.pigment)
+                                    .font(.system(size: 9, design: .monospaced))
+                                    .foregroundStyle(Color.inkSoft)
+                                if entry.paint.isSulfide {
+                                    Text("N")
+                                        .font(.system(size: 8, weight: .semibold))
+                                        .foregroundStyle(Color.accent)
+                                        .padding(.horizontal, 3)
+                                        .padding(.vertical, 1)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 2, style: .continuous)
+                                                .strokeBorder(Color.accent.opacity(0.6), lineWidth: 1)
+                                        )
+                                }
+                                Spacer(minLength: 8)
+                                Text("\(entry.percent)%")
+                                    .font(.system(size: 11, design: .monospaced))
+                                    .foregroundStyle(Color.ink)
+                            }
                         }
                     }
                 }
+                .contentShape(Rectangle())
             }
-            .padding(12)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(
-                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .fill(Color.white.opacity(selected ? 0.9 : 0.42))
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .strokeBorder(selected ? Color.accent.opacity(0.55) : Color.line, lineWidth: 1)
-            )
+            .buttonStyle(.plain)
+
+            HStack(spacing: 6) {
+                ForEach(recipe.entries) { entry in
+                    Button {
+                        onShowPaint(entry.paint)
+                    } label: {
+                        HStack(spacing: 4) {
+                            RoundedRectangle(cornerRadius: 2, style: .continuous)
+                                .fill(entry.paint.swatchColor)
+                                .frame(width: 9, height: 9)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 2, style: .continuous)
+                                        .strokeBorder(Color.ink.opacity(0.12), lineWidth: 1)
+                                )
+                            Text(entry.paint.meta?.dryingLabel ?? entry.paint.opacityLabel)
+                                .font(.system(size: 9))
+                                .foregroundStyle(Color.inkSoft)
+                        }
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 3)
+                        .background(Capsule().fill(Color.white.opacity(0.5)))
+                        .overlay(Capsule().strokeBorder(Color.line, lineWidth: 1))
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("\(entry.paint.name)の詳細")
+                }
+                Spacer(minLength: 0)
+            }
+
+            if recipe.hasSulfide {
+                Text("N は硫化物を含む色。鉛系の白（シルバーホワイト）との混色は避ける。")
+                    .font(.system(size: 9.5))
+                    .foregroundStyle(Color.inkSoft)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
         }
-        .buttonStyle(.plain)
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .fill(Color.white.opacity(selected ? 0.9 : 0.42))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .strokeBorder(selected ? Color.accent.opacity(0.55) : Color.line, lineWidth: 1)
+        )
     }
 }
 

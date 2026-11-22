@@ -14,6 +14,19 @@ struct Sample: Identifiable {
     let hex: String
 }
 
+/// 画面から開くシート。同時に 1 枚だけ出す。
+private enum ActiveSheet: Identifiable {
+    case palette
+    case paint(Paint)
+
+    var id: String {
+        switch self {
+        case .palette: return "palette"
+        case .paint(let paint): return "paint-\(paint.id)"
+        }
+    }
+}
+
 struct ContentView: View {
     @EnvironmentObject private var pro: ProStore
 
@@ -23,7 +36,9 @@ struct ContentView: View {
     @State private var recipes: [MixRecipe] = []
     @State private var selectedRecipeID: Int?
     @State private var paletteKind: PaletteKind = .oil
+    @State private var scope: PaletteScope = .catalogue
     @State private var palettePigments = MixSolver.pigments(for: PaletteData.oil)
+    @State private var sheet: ActiveSheet?
     @State private var fiveIDs = PaletteKind.oil.defaultFiveIDs
     @State private var fivePigments = MixSolver.pigments(for: PaletteData.oil.filter { PaletteKind.oil.defaultFiveIDs.contains($0.id) })
     @State private var limitedMode = false
@@ -75,11 +90,15 @@ struct ContentView: View {
                     pro: pro,
                     limitedMode: limitedMode,
                     fiveIDs: fiveIDs,
+                    scope: scope,
                     kuwaharaLevel: kuwaharaLevel,
                     gamutOn: gamutOn,
                     isPreparingPreview: isPreparingPreview,
                     onSelectPalette: changePalette,
+                    onSelectScope: selectScope,
                     onToggleLimited: toggleLimited,
+                    onOpenPalette: { sheet = .palette },
+                    onShowPaint: { sheet = .paint($0) },
                     onToggleFive: toggleFive,
                     onPreset: applyPreset,
                     onKuwahara: setKuwahara,
@@ -103,6 +122,17 @@ struct ContentView: View {
             Button("閉じる", role: .cancel) {}
         } message: {
             Text("別の写真でお試しください。HEIF や RAW の一部は読み込めないことがあります。")
+        }
+        .sheet(item: $sheet) { item in
+            switch item {
+            case .palette:
+                PaletteSheet(kind: paletteKind,
+                             fiveIDs: fiveIDs,
+                             onToggle: { toggleFive($0) },
+                             onClose: { sheet = nil })
+            case .paint(let paint):
+                PaintDetailSheet(paint: paint)
+            }
         }
     }
 
@@ -208,7 +238,8 @@ struct ContentView: View {
     private func changePalette(_ kind: PaletteKind) {
         guard kind != paletteKind else { return }
         paletteKind = kind
-        palettePigments = MixSolver.pigments(for: kind.paints)
+        scope = .catalogue
+        palettePigments = MixSolver.pigments(for: kind.paints(in: scope))
         fiveIDs = kind.defaultFiveIDs
         fivePigments = MixSolver.pigments(for: kind.paints.filter { fiveIDs.contains($0.id) })
         recipes = []
@@ -217,6 +248,13 @@ struct ContentView: View {
         if let sample {
             solve(target: sample.lab, maxPaints: 3)
         }
+    }
+
+    private func selectScope(_ new: PaletteScope) {
+        guard new != scope else { return }
+        scope = new
+        palettePigments = MixSolver.pigments(for: paletteKind.paints(in: new))
+        resolveAgain()
     }
 
     private func toggleLimited() {

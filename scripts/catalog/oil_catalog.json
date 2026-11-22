@@ -1,0 +1,3461 @@
+{
+ "prices": {
+  "10ml": {
+   "A": 330,
+   "B": 374
+  },
+  "20ml": {
+   "A": 550,
+   "B": 605,
+   "C": 770,
+   "D": 1430,
+   "E": 2310,
+   "H": 2530,
+   "I": 5060,
+   "L": 3300
+  },
+  "40ml": {
+   "A": 990,
+   "B": 1100,
+   "C": 1430,
+   "D": 2530,
+   "E": 4070,
+   "H": 4620,
+   "I": 8580
+  },
+  "110ml": {
+   "A": 2310,
+   "B": 2530,
+   "C": 3300,
+   "D": 5720,
+   "E": 9350,
+   "H": 10780
+  }
+ },
+ "colors": [
+  {
+   "refs": {
+    "10ml": "HH001",
+    "20ml": "H001",
+    "40ml": "H201",
+    "110ml": "HH201"
+   },
+   "ref20": "H001",
+   "name_jp": "クリムソンレーキ",
+   "name_en": "CRIMSON LAKE",
+   "traditional": null,
+   "group": "赤",
+   "series": "A",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "透明",
+   "toxicity": null,
+   "pigments": "PR177+PR254",
+   "pure_rgb": [
+    138,
+    40,
+    47
+   ],
+   "tint_rgb": [
+    204,
+    60,
+    103
+   ],
+   "name_en_chart": "CRIMSON LAKE",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H002",
+    "40ml": "H202",
+    "110ml": "HH202"
+   },
+   "ref20": "H002",
+   "name_jp": "カーマイン",
+   "name_en": "CARMINE",
+   "traditional": null,
+   "group": "赤",
+   "series": "B",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "透明",
+   "toxicity": null,
+   "pigments": "PR177+PR254",
+   "pure_rgb": [
+    175,
+    32,
+    37
+   ],
+   "tint_rgb": [
+    221,
+    70,
+    104
+   ],
+   "name_en_chart": "CARMINE",
+   "price_20ml": 605
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H004",
+    "40ml": "H204",
+    "110ml": "HH204"
+   },
+   "ref20": "H004",
+   "name_jp": "ローズマダー",
+   "name_en": "ROSE MADDER",
+   "traditional": null,
+   "group": "赤",
+   "series": "B",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "透明",
+   "toxicity": null,
+   "pigments": "PR177+PR254",
+   "pure_rgb": [
+    195,
+    35,
+    36
+   ],
+   "tint_rgb": [
+    233,
+    85,
+    115
+   ],
+   "name_en_chart": "ROSE MADDER",
+   "price_20ml": 605
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H028",
+    "40ml": "H228",
+    "110ml": "HH228"
+   },
+   "ref20": "H028",
+   "name_jp": "ピロールレッド",
+   "name_en": "PYRROLE RED",
+   "traditional": null,
+   "group": "赤",
+   "series": "B",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PR254",
+   "pure_rgb": [
+    199,
+    41,
+    39
+   ],
+   "tint_rgb": [
+    233,
+    76,
+    89
+   ],
+   "name_en_chart": "PYRROLE RED",
+   "price_20ml": 605
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H029",
+    "40ml": "H229",
+    "110ml": null
+   },
+   "ref20": "H029",
+   "name_jp": "ピロールレッドトランスペアレント",
+   "name_en": "PYRROLE RED TRANSPARENT",
+   "traditional": null,
+   "group": "赤",
+   "series": "B",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "透明",
+   "toxicity": null,
+   "pigments": "PR254",
+   "pure_rgb": [
+    157,
+    39,
+    45
+   ],
+   "tint_rgb": [
+    231,
+    43,
+    79
+   ],
+   "name_en_chart": "PYRROLE RED TRANSPARENT",
+   "price_20ml": 605
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H007",
+    "40ml": "H207",
+    "110ml": "HH207"
+   },
+   "ref20": "H007",
+   "name_jp": "カドミウムレッド",
+   "name_en": "CADMIUM RED",
+   "traditional": null,
+   "group": "赤",
+   "series": "H",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 4,
+   "opacity": "不透明",
+   "toxicity": null,
+   "pigments": "PR108",
+   "pure_rgb": [
+    224,
+    35,
+    33
+   ],
+   "tint_rgb": [
+    232,
+    62,
+    65
+   ],
+   "name_en_chart": "CADMIUM RED",
+   "price_20ml": 2530
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H009",
+    "40ml": "H209",
+    "110ml": null
+   },
+   "ref20": "H009",
+   "name_jp": "カドミウムレッドディープ",
+   "name_en": "CADMIUM RED DEEP",
+   "traditional": null,
+   "group": "赤",
+   "series": "H",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 4,
+   "opacity": "不透明",
+   "toxicity": null,
+   "pigments": "PR108",
+   "pure_rgb": [
+    224,
+    20,
+    34
+   ],
+   "tint_rgb": [
+    232,
+    61,
+    59
+   ],
+   "name_en_chart": "CADMIUM RED DEEP",
+   "price_20ml": 2530
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H011",
+    "40ml": "H211",
+    "110ml": null
+   },
+   "ref20": "H011",
+   "name_jp": "カドミウムレッドパープル",
+   "name_en": "CADMIUM RED PURPLE",
+   "traditional": null,
+   "group": "赤",
+   "series": "H",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 4,
+   "opacity": "不透明",
+   "toxicity": null,
+   "pigments": "PR108",
+   "pure_rgb": [
+    182,
+    50,
+    53
+   ],
+   "tint_rgb": [
+    203,
+    75,
+    106
+   ],
+   "name_en_chart": "CADMIUM RED PURPLE",
+   "price_20ml": 2530
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H015",
+    "40ml": "H215",
+    "110ml": null
+   },
+   "ref20": "H015",
+   "name_jp": "バーミリオン",
+   "name_en": "VERMILION",
+   "traditional": null,
+   "group": "赤",
+   "series": "I",
+   "permanency": 1,
+   "admixing": null,
+   "drying": 3,
+   "opacity": "不透明",
+   "toxicity": null,
+   "pigments": "PR106",
+   "pure_rgb": [
+    216,
+    49,
+    36
+   ],
+   "tint_rgb": [
+    236,
+    104,
+    78
+   ],
+   "name_en_chart": "VERMILION",
+   "price_20ml": 5060
+  },
+  {
+   "refs": {
+    "10ml": "HH018",
+    "20ml": "H018",
+    "40ml": "H218",
+    "110ml": "HH218"
+   },
+   "ref20": "H018",
+   "name_jp": "バーミリオンヒュー",
+   "name_en": "VERMILION HUE",
+   "traditional": null,
+   "group": "赤",
+   "series": "A",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PY139+PO73+PR254",
+   "pure_rgb": [
+    232,
+    66,
+    31
+   ],
+   "tint_rgb": [
+    235,
+    99,
+    67
+   ],
+   "name_en_chart": "VERMILION HUE",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": "HH022",
+    "20ml": "H022",
+    "40ml": "H222",
+    "110ml": "HH222"
+   },
+   "ref20": "H022",
+   "name_jp": "ブライトレッド",
+   "name_en": "BRIGHT RED",
+   "traditional": null,
+   "group": "赤",
+   "series": "B",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PR254",
+   "pure_rgb": [
+    216,
+    13,
+    25
+   ],
+   "tint_rgb": [
+    231,
+    45,
+    65
+   ],
+   "name_en_chart": "BRIGHT RED",
+   "price_20ml": 605
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H020",
+    "40ml": "H220",
+    "110ml": "HH220"
+   },
+   "ref20": "H020",
+   "name_jp": "キナクリドンレッド",
+   "name_en": "QUINACRIDONE RED",
+   "traditional": null,
+   "group": "赤",
+   "series": "D",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "透明",
+   "toxicity": null,
+   "pigments": "PV19",
+   "pure_rgb": [
+    142,
+    29,
+    42
+   ],
+   "tint_rgb": [
+    225,
+    49,
+    114
+   ],
+   "name_en_chart": "QUINACRIDONE RED",
+   "price_20ml": 1430
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H127",
+    "40ml": "H327",
+    "110ml": null
+   },
+   "ref20": "H127",
+   "name_jp": "キナクリドンオペラ",
+   "name_en": "QUINACRIDONE OPERA",
+   "traditional": null,
+   "group": "赤",
+   "series": "C",
+   "permanency": 1,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "半不透明",
+   "toxicity": null,
+   "pigments": "PR122",
+   "pure_rgb": [
+    230,
+    10,
+    75
+   ],
+   "tint_rgb": [
+    235,
+    113,
+    167
+   ],
+   "name_en_chart": "QUINACRIDONE OPERA",
+   "price_20ml": 770
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H021",
+    "40ml": "H221",
+    "110ml": "HH221"
+   },
+   "ref20": "H021",
+   "name_jp": "ブリリアントピンク",
+   "name_en": "BRILLIANT PINK",
+   "traditional": null,
+   "group": "赤",
+   "series": "B",
+   "permanency": 1,
+   "admixing": null,
+   "drying": 3,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PR188+PW6",
+   "pure_rgb": [
+    234,
+    88,
+    114
+   ],
+   "tint_rgb": [
+    243,
+    168,
+    179
+   ],
+   "name_en_chart": "BRILLIANT PINK",
+   "price_20ml": 605
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H026",
+    "40ml": "H226",
+    "110ml": "HH226"
+   },
+   "ref20": "H026",
+   "name_jp": "シェルピンク",
+   "name_en": "SHELL PINK",
+   "traditional": null,
+   "group": "赤",
+   "series": "B",
+   "permanency": 1,
+   "admixing": null,
+   "drying": 3,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PR188+PW6",
+   "pure_rgb": [
+    247,
+    193,
+    188
+   ],
+   "tint_rgb": [
+    250,
+    214,
+    200
+   ],
+   "name_en_chart": "SHELL PINK",
+   "price_20ml": 605
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H057",
+    "40ml": "H257",
+    "110ml": "HH257"
+   },
+   "ref20": "H057",
+   "name_jp": "カドミウムオレンジ",
+   "name_en": "CADMIUM ORANGE",
+   "traditional": null,
+   "group": "橙",
+   "series": "E",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 4,
+   "opacity": "不透明",
+   "toxicity": null,
+   "pigments": "PO20",
+   "pure_rgb": [
+    235,
+    90,
+    25
+   ],
+   "tint_rgb": [
+    239,
+    125,
+    0
+   ],
+   "name_en_chart": "CADMIUM ORANGE",
+   "price_20ml": 2310
+  },
+  {
+   "refs": {
+    "10ml": "HH046",
+    "20ml": "H046",
+    "40ml": "H246",
+    "110ml": "HH246"
+   },
+   "ref20": "H046",
+   "name_jp": "パーマネントオレンジ",
+   "name_en": "PERMANENT ORANGE",
+   "traditional": null,
+   "group": "橙",
+   "series": "A",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PY139+PR254",
+   "pure_rgb": [
+    232,
+    67,
+    17
+   ],
+   "tint_rgb": [
+    234,
+    95,
+    23
+   ],
+   "name_en_chart": "PERMANENT ORANGE",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H062",
+    "40ml": "H262",
+    "110ml": "HH262"
+   },
+   "ref20": "H062",
+   "name_jp": "ピロールオレンジ",
+   "name_en": "PYRROLE ORANGE",
+   "traditional": null,
+   "group": "橙",
+   "series": "B",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PO73",
+   "pure_rgb": [
+    227,
+    55,
+    17
+   ],
+   "tint_rgb": [
+    229,
+    82,
+    11
+   ],
+   "name_en_chart": "PYRROLE ORANGE",
+   "price_20ml": 605
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H030",
+    "40ml": "H230",
+    "110ml": "HH230"
+   },
+   "ref20": "H030",
+   "name_jp": "ネイプルスイエロー",
+   "name_en": "NAPLES YELLOW",
+   "traditional": null,
+   "group": "黄",
+   "series": "A",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 3,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PY35+PY42+PW6",
+   "pure_rgb": [
+    255,
+    227,
+    131
+   ],
+   "tint_rgb": [
+    255,
+    237,
+    174
+   ],
+   "name_en_chart": "NAPLES YELLOW",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H061",
+    "40ml": "H261",
+    "110ml": "HH261"
+   },
+   "ref20": "H061",
+   "name_jp": "アイボリホワイト",
+   "name_en": "IVORY WHITE",
+   "traditional": null,
+   "group": "黄",
+   "series": "A",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 3,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PY42+PY53+PW6",
+   "pure_rgb": [
+    255,
+    244,
+    213
+   ],
+   "tint_rgb": [
+    255,
+    247,
+    234
+   ],
+   "name_en_chart": "IVORY WHITE",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H034",
+    "40ml": "H234",
+    "110ml": "HH234"
+   },
+   "ref20": "H034",
+   "name_jp": "ジョーンブリヤンNo.2",
+   "name_en": "JAUNE BRILLANT No.2",
+   "traditional": null,
+   "group": "黄",
+   "series": "A",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PO20+PW6",
+   "pure_rgb": [
+    247,
+    191,
+    141
+   ],
+   "tint_rgb": [
+    252,
+    223,
+    192
+   ],
+   "name_en_chart": "",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": "HH035",
+    "20ml": "H035",
+    "40ml": "H235",
+    "110ml": "HH235"
+   },
+   "ref20": "H035",
+   "name_jp": "ジョーンブリヤンNo.3",
+   "name_en": "JAUNE BRILLANT No.3",
+   "traditional": null,
+   "group": "黄",
+   "series": "A",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PO20+PW6",
+   "pure_rgb": [
+    245,
+    174,
+    120
+   ],
+   "tint_rgb": [
+    248,
+    199,
+    173
+   ],
+   "name_en_chart": "",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": "HH037",
+    "20ml": "H037",
+    "40ml": "H237",
+    "110ml": "HH237"
+   },
+   "ref20": "H037",
+   "name_jp": "レモンイエロー",
+   "name_en": "LEMON YELLOW",
+   "traditional": null,
+   "group": "黄",
+   "series": "B",
+   "permanency": 2,
+   "admixing": null,
+   "drying": 3,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PY184+PW6",
+   "pure_rgb": [
+    255,
+    233,
+    0
+   ],
+   "tint_rgb": [
+    252,
+    244,
+    114
+   ],
+   "name_en_chart": "LEMON YELLOW",
+   "price_20ml": 605
+  },
+  {
+   "refs": {
+    "10ml": "HH040",
+    "20ml": "H040",
+    "40ml": "H240",
+    "110ml": "HH240"
+   },
+   "ref20": "H040",
+   "name_jp": "イエローオーカー",
+   "name_en": "YELLOW OCHRE",
+   "traditional": null,
+   "group": "黄",
+   "series": "A",
+   "permanency": 4,
+   "admixing": null,
+   "drying": 2,
+   "opacity": "不透明",
+   "toxicity": null,
+   "pigments": "PY42",
+   "pure_rgb": [
+    178,
+    124,
+    49
+   ],
+   "tint_rgb": [
+    214,
+    164,
+    82
+   ],
+   "name_en_chart": "YELLOW OCHRE",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H066",
+    "40ml": "H266",
+    "110ml": null
+   },
+   "ref20": "H066",
+   "name_jp": "ポリアゾイエロー",
+   "name_en": "POLYAZO YELLOW",
+   "traditional": null,
+   "group": "黄",
+   "series": "C",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "透明",
+   "toxicity": null,
+   "pigments": "PY128",
+   "pure_rgb": [
+    249,
+    186,
+    0
+   ],
+   "tint_rgb": [
+    255,
+    233,
+    8
+   ],
+   "name_en_chart": "POLYAZO YELLOW",
+   "price_20ml": 770
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H067",
+    "40ml": "H267",
+    "110ml": "HH267"
+   },
+   "ref20": "H067",
+   "name_jp": "イミダゾロンイエロー",
+   "name_en": "IMIDAZOLONE YELLOW",
+   "traditional": null,
+   "group": "黄",
+   "series": "B",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "半不透明",
+   "toxicity": null,
+   "pigments": "PY154",
+   "pure_rgb": [
+    254,
+    211,
+    0
+   ],
+   "tint_rgb": [
+    255,
+    229,
+    11
+   ],
+   "name_en_chart": "IMIDAZOLONE YELLOW",
+   "price_20ml": 605
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H043",
+    "40ml": "H243",
+    "110ml": "HH243"
+   },
+   "ref20": "H043",
+   "name_jp": "パーマネントイエローレモン",
+   "name_en": "PERMANENT YELLOW LEMON",
+   "traditional": null,
+   "group": "黄",
+   "series": "A",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PY138+PY184",
+   "pure_rgb": [
+    250,
+    238,
+    0
+   ],
+   "tint_rgb": [
+    254,
+    245,
+    115
+   ],
+   "name_en_chart": "PERMANENT YELLOW LEMON",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": "HH044",
+    "20ml": "H044",
+    "40ml": "H244",
+    "110ml": "HH244"
+   },
+   "ref20": "H044",
+   "name_jp": "パーマネントイエローライト",
+   "name_en": "PERMANENT YELLOW LIGHT",
+   "traditional": null,
+   "group": "黄",
+   "series": "A",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PY151+PY139",
+   "pure_rgb": [
+    249,
+    211,
+    0
+   ],
+   "tint_rgb": [
+    255,
+    221,
+    40
+   ],
+   "name_en_chart": "PERMANENT YELLOW LIGHT",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": "HH058",
+    "20ml": "H058",
+    "40ml": "H258",
+    "110ml": "HH258"
+   },
+   "ref20": "H058",
+   "name_jp": "パーマネントイエロー",
+   "name_en": "PERMANENT YELLOW",
+   "traditional": null,
+   "group": "黄",
+   "series": "A",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PY151+PY139",
+   "pure_rgb": [
+    245,
+    162,
+    10
+   ],
+   "tint_rgb": [
+    254,
+    214,
+    48
+   ],
+   "name_en_chart": "PERMANENT YELLOW",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H048",
+    "40ml": "H248",
+    "110ml": null
+   },
+   "ref20": "H048",
+   "name_jp": "オーレオリン",
+   "name_en": "AUREOLIN",
+   "traditional": null,
+   "group": "黄",
+   "series": "E",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 3,
+   "opacity": "半不透明",
+   "toxicity": "コバルト",
+   "pigments": "PY40",
+   "pure_rgb": [
+    249,
+    185,
+    2
+   ],
+   "tint_rgb": [
+    255,
+    224,
+    31
+   ],
+   "name_en_chart": "AUREOLIN",
+   "price_20ml": 2310
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H049",
+    "40ml": "H249",
+    "110ml": null
+   },
+   "ref20": "H049",
+   "name_jp": "カドミウムイエローレモン",
+   "name_en": "CADMIUM YELLOW LEMON",
+   "traditional": null,
+   "group": "黄",
+   "series": "E",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 4,
+   "opacity": "不透明",
+   "toxicity": null,
+   "pigments": "PY35",
+   "pure_rgb": [
+    250,
+    236,
+    0
+   ],
+   "tint_rgb": [
+    255,
+    245,
+    124
+   ],
+   "name_en_chart": "CADMIUM YELLOW LEMON",
+   "price_20ml": 2310
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H052",
+    "40ml": "H252",
+    "110ml": "HH252"
+   },
+   "ref20": "H052",
+   "name_jp": "カドミウムイエロー",
+   "name_en": "CADMIUM YELLOW",
+   "traditional": null,
+   "group": "黄",
+   "series": "E",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 4,
+   "opacity": "不透明",
+   "toxicity": null,
+   "pigments": "PO20+PY35",
+   "pure_rgb": [
+    248,
+    184,
+    0
+   ],
+   "tint_rgb": [
+    252,
+    206,
+    44
+   ],
+   "name_en_chart": "CADMIUM YELLOW",
+   "price_20ml": 2310
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H068",
+    "40ml": "H268",
+    "110ml": null
+   },
+   "ref20": "H068",
+   "name_jp": "ニッケルアゾイエロー",
+   "name_en": "NICKEL AZO YELLOW",
+   "traditional": null,
+   "group": "黄",
+   "series": "C",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "透明",
+   "toxicity": null,
+   "pigments": "PY150",
+   "pure_rgb": [
+    154,
+    79,
+    39
+   ],
+   "tint_rgb": [
+    241,
+    201,
+    15
+   ],
+   "name_en_chart": "NICKEL AZO YELLOW",
+   "price_20ml": 770
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H069",
+    "40ml": "H269",
+    "110ml": null
+   },
+   "ref20": "H069",
+   "name_jp": "イソインドリノンイエロー",
+   "name_en": "ISOINDOLINONE YELLOW",
+   "traditional": null,
+   "group": "黄",
+   "series": "C",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "透明",
+   "toxicity": null,
+   "pigments": "PY110",
+   "pure_rgb": [
+    215,
+    93,
+    22
+   ],
+   "tint_rgb": [
+    247,
+    179,
+    1
+   ],
+   "name_en_chart": "ISOINDOLINONE YELLOW",
+   "price_20ml": 770
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H047",
+    "40ml": "H247",
+    "110ml": "HH247"
+   },
+   "ref20": "H047",
+   "name_jp": "グリニッシュイエロー",
+   "name_en": "GREENISH YELLOW",
+   "traditional": null,
+   "group": "黄",
+   "series": "C",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 4,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PY17+PG7+PR83",
+   "pure_rgb": [
+    70,
+    107,
+    45
+   ],
+   "tint_rgb": [
+    187,
+    206,
+    22
+   ],
+   "name_en_chart": "GREENISH YELLOW",
+   "price_20ml": 770
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H070",
+    "40ml": "H270",
+    "110ml": "HH270"
+   },
+   "ref20": "H070",
+   "name_jp": "ビリジャン",
+   "name_en": "VIRIDIAN",
+   "traditional": null,
+   "group": "緑",
+   "series": "H",
+   "permanency": 4,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "半不透明",
+   "toxicity": null,
+   "pigments": "PG18",
+   "pure_rgb": [
+    11,
+    71,
+    56
+   ],
+   "tint_rgb": [
+    46,
+    165,
+    163
+   ],
+   "name_en_chart": "VIRIDIAN",
+   "price_20ml": 2530
+  },
+  {
+   "refs": {
+    "10ml": "HH071",
+    "20ml": "H071",
+    "40ml": "H271",
+    "110ml": "HH271"
+   },
+   "ref20": "H071",
+   "name_jp": "ビリジャンヒュー",
+   "name_en": "VIRIDIAN HUE",
+   "traditional": null,
+   "group": "緑",
+   "series": "A",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 2,
+   "opacity": "半不透明",
+   "toxicity": null,
+   "pigments": "PG7",
+   "pure_rgb": [
+    0,
+    79,
+    59
+   ],
+   "tint_rgb": [
+    0,
+    144,
+    129
+   ],
+   "name_en_chart": "VIRIDIAN HUE",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H094",
+    "40ml": "H294",
+    "110ml": "HH294"
+   },
+   "ref20": "H094",
+   "name_jp": "フタログリーン",
+   "name_en": "PHTHALO GREEN",
+   "traditional": null,
+   "group": "緑",
+   "series": "B",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 4,
+   "opacity": "透明",
+   "toxicity": null,
+   "pigments": "PG7",
+   "pure_rgb": [
+    10,
+    20,
+    49
+   ],
+   "tint_rgb": [
+    0,
+    107,
+    82
+   ],
+   "name_en_chart": "PHTHALO GREEN",
+   "price_20ml": 605
+  },
+  {
+   "refs": {
+    "10ml": "HH074",
+    "20ml": "H074",
+    "40ml": "H274",
+    "110ml": "HH274"
+   },
+   "ref20": "H074",
+   "name_jp": "エメラルドグリーンノーバ",
+   "name_en": "EMERALD GREEN NOVA",
+   "traditional": null,
+   "group": "緑",
+   "series": "B",
+   "permanency": 2,
+   "admixing": null,
+   "drying": 2,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PY184+PG7+PW6",
+   "pure_rgb": [
+    0,
+    152,
+    93
+   ],
+   "tint_rgb": [
+    118,
+    195,
+    155
+   ],
+   "name_en_chart": "EMERALD GREEN NOVA",
+   "price_20ml": 605
+  },
+  {
+   "refs": {
+    "10ml": "HH075",
+    "20ml": "H075",
+    "40ml": "H275",
+    "110ml": "HH275"
+   },
+   "ref20": "H075",
+   "name_jp": "テールベルト",
+   "name_en": "TERRE VERTE",
+   "traditional": null,
+   "group": "緑",
+   "series": "A",
+   "permanency": 4,
+   "admixing": null,
+   "drying": 3,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PG23",
+   "pure_rgb": [
+    21,
+    65,
+    48
+   ],
+   "tint_rgb": [
+    88,
+    149,
+    106
+   ],
+   "name_en_chart": "TERRE VERTE",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H076",
+    "40ml": "H276",
+    "110ml": "HH276"
+   },
+   "ref20": "H076",
+   "name_jp": "サップグリーン",
+   "name_en": "SAP GREEN",
+   "traditional": null,
+   "group": "緑",
+   "series": "B",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "透明",
+   "toxicity": null,
+   "pigments": "PY150+PG7+PR177",
+   "pure_rgb": [
+    0,
+    42,
+    26
+   ],
+   "tint_rgb": [
+    116,
+    167,
+    52
+   ],
+   "name_en_chart": "SAP GREEN",
+   "price_20ml": 605
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H077",
+    "40ml": "H277",
+    "110ml": "HH277"
+   },
+   "ref20": "H077",
+   "name_jp": "パーマネントグリーンライト",
+   "name_en": "PERMANENT GREEN LIGHT",
+   "traditional": null,
+   "group": "緑",
+   "series": "A",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PY151+PG7",
+   "pure_rgb": [
+    112,
+    186,
+    44
+   ],
+   "tint_rgb": [
+    165,
+    203,
+    15
+   ],
+   "name_en_chart": "PERMANENT GREEN LIGHT",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": "HH078",
+    "20ml": "H078",
+    "40ml": "H278",
+    "110ml": "HH278"
+   },
+   "ref20": "H078",
+   "name_jp": "パーマネントグリーンペール",
+   "name_en": "PERMANENT GREEN PALE",
+   "traditional": null,
+   "group": "緑",
+   "series": "A",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PY151+PG7",
+   "pure_rgb": [
+    37,
+    169,
+    57
+   ],
+   "tint_rgb": [
+    121,
+    189,
+    42
+   ],
+   "name_en_chart": "PERMANENT GREEN PALE",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H079",
+    "40ml": "H279",
+    "110ml": "HH279"
+   },
+   "ref20": "H079",
+   "name_jp": "パーマネントグリーン",
+   "name_en": "PERMANENT GREEN",
+   "traditional": null,
+   "group": "緑",
+   "series": "A",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "半不透明",
+   "toxicity": null,
+   "pigments": "PY151+PY110+PB15",
+   "pure_rgb": [
+    0,
+    88,
+    49
+   ],
+   "tint_rgb": [
+    56,
+    144,
+    85
+   ],
+   "name_en_chart": "PERMANENT GREEN",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": "HH080",
+    "20ml": "H080",
+    "40ml": "H280",
+    "110ml": "HH280"
+   },
+   "ref20": "H080",
+   "name_jp": "パーマネントグリーンディープ",
+   "name_en": "PERMANENT GREEN DEEP",
+   "traditional": null,
+   "group": "緑",
+   "series": "A",
+   "permanency": 2,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "半不透明",
+   "toxicity": null,
+   "pigments": "PY151+PY110+PB15",
+   "pure_rgb": [
+    0,
+    26,
+    24
+   ],
+   "tint_rgb": [
+    25,
+    120,
+    111
+   ],
+   "name_en_chart": "PERMANENT GREEN DEEP",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H096",
+    "40ml": "H296",
+    "110ml": null
+   },
+   "ref20": "H096",
+   "name_jp": "カドミウムグリーンライト",
+   "name_en": "CADMIUM GREEN LIGHT",
+   "traditional": null,
+   "group": "緑",
+   "series": "D",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PY35+PG18",
+   "pure_rgb": [
+    94,
+    171,
+    61
+   ],
+   "tint_rgb": [
+    146,
+    196,
+    66
+   ],
+   "name_en_chart": "CADMIUM GREEN LIGHT",
+   "price_20ml": 1430
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H082",
+    "40ml": "H282",
+    "110ml": "HH282"
+   },
+   "ref20": "H082",
+   "name_jp": "カドミウムグリーン",
+   "name_en": "CADMIUM GREEN",
+   "traditional": null,
+   "group": "緑",
+   "series": "E",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "不透明",
+   "toxicity": null,
+   "pigments": "PY35+PG18",
+   "pure_rgb": [
+    0,
+    104,
+    54
+   ],
+   "tint_rgb": [
+    98,
+    188,
+    131
+   ],
+   "name_en_chart": "CADMIUM GREEN",
+   "price_20ml": 2310
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H100",
+    "40ml": "H300",
+    "110ml": null
+   },
+   "ref20": "H100",
+   "name_jp": "ペリレングリーン",
+   "name_en": "PERYLENE GREEN",
+   "traditional": null,
+   "group": "緑",
+   "series": "D",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "半不透明",
+   "toxicity": null,
+   "pigments": "PBk31",
+   "pure_rgb": [
+    17,
+    27,
+    20
+   ],
+   "tint_rgb": [
+    49,
+    82,
+    62
+   ],
+   "name_en_chart": "PERYLENE GREEN",
+   "price_20ml": 1430
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H088",
+    "40ml": "H288",
+    "110ml": "HH288"
+   },
+   "ref20": "H088",
+   "name_jp": "オキサイドオブクロミウム",
+   "name_en": "OXIDE OF CHROMIUM",
+   "traditional": null,
+   "group": "緑",
+   "series": "B",
+   "permanency": 4,
+   "admixing": null,
+   "drying": 2,
+   "opacity": "不透明",
+   "toxicity": null,
+   "pigments": "PG17",
+   "pure_rgb": [
+    60,
+    110,
+    63
+   ],
+   "tint_rgb": [
+    77,
+    143,
+    97
+   ],
+   "name_en_chart": "OXIDE OF CHROMIUM",
+   "price_20ml": 605
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H092",
+    "40ml": "H292",
+    "110ml": "HH292"
+   },
+   "ref20": "H092",
+   "name_jp": "シナバーグリーン",
+   "name_en": "CINNABAR GREEN",
+   "traditional": null,
+   "group": "緑",
+   "series": "B",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 2,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PY154+PY42+PY53+PB15",
+   "pure_rgb": [
+    92,
+    130,
+    54
+   ],
+   "tint_rgb": [
+    160,
+    192,
+    102
+   ],
+   "name_en_chart": "CINNABAR GREEN",
+   "price_20ml": 605
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H091",
+    "40ml": "H291",
+    "110ml": "HH291"
+   },
+   "ref20": "H091",
+   "name_jp": "シナバーグリーンライト",
+   "name_en": "CINNABAR GREEN LIGHT",
+   "traditional": null,
+   "group": "緑",
+   "series": "B",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PY154+PY119+PG7+PW6",
+   "pure_rgb": [
+    194,
+    194,
+    52
+   ],
+   "tint_rgb": [
+    249,
+    241,
+    113
+   ],
+   "name_en_chart": "CINNABAR GREEN LIGHT",
+   "price_20ml": 605
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H084",
+    "40ml": "H284",
+    "110ml": null
+   },
+   "ref20": "H084",
+   "name_jp": "コンポーズグリーン",
+   "name_en": "COMPOSE GREEN",
+   "traditional": null,
+   "group": "緑",
+   "series": "C",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 2,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PY35+PG18+PW6",
+   "pure_rgb": [
+    146,
+    202,
+    130
+   ],
+   "tint_rgb": [
+    173,
+    213,
+    157
+   ],
+   "name_en_chart": "COMPOSE GREEN",
+   "price_20ml": 770
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H101",
+    "40ml": "H301",
+    "110ml": "HH301"
+   },
+   "ref20": "H101",
+   "name_jp": "コバルトブルー",
+   "name_en": "COBALT BLUE",
+   "traditional": null,
+   "group": "青",
+   "series": "H",
+   "permanency": 4,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PB28",
+   "pure_rgb": [
+    29,
+    57,
+    119
+   ],
+   "tint_rgb": [
+    41,
+    131,
+    198
+   ],
+   "name_en_chart": "COBALT BLUE",
+   "price_20ml": 2530
+  },
+  {
+   "refs": {
+    "10ml": "HH104",
+    "20ml": "H104",
+    "40ml": "H304",
+    "110ml": "HH304"
+   },
+   "ref20": "H104",
+   "name_jp": "コバルトブルーヒュー",
+   "name_en": "COBALT BLUE HUE",
+   "traditional": null,
+   "group": "青",
+   "series": "A",
+   "permanency": 3,
+   "admixing": "N",
+   "drying": 4,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PB15+PB29+PW6",
+   "pure_rgb": [
+    32,
+    63,
+    104
+   ],
+   "tint_rgb": [
+    0,
+    108,
+    184
+   ],
+   "name_en_chart": "COBALT BLUE HUE",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H105",
+    "40ml": "H305",
+    "110ml": "HH305"
+   },
+   "ref20": "H105",
+   "name_jp": "セルリアンブルー",
+   "name_en": "CERULEAN BLUE",
+   "traditional": null,
+   "group": "青",
+   "series": "H",
+   "permanency": 4,
+   "admixing": null,
+   "drying": 3,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PB35",
+   "pure_rgb": [
+    0,
+    109,
+    158
+   ],
+   "tint_rgb": [
+    44,
+    165,
+    209
+   ],
+   "name_en_chart": "CERULEAN BLUE",
+   "price_20ml": 2530
+  },
+  {
+   "refs": {
+    "10ml": "HH106",
+    "20ml": "H106",
+    "40ml": "H306",
+    "110ml": "HH306"
+   },
+   "ref20": "H106",
+   "name_jp": "セルリアンブルーヒュー",
+   "name_en": "CERULEAN BLUE HUE",
+   "traditional": null,
+   "group": "青",
+   "series": "A",
+   "permanency": 2,
+   "admixing": null,
+   "drying": 2,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PB15+PW6",
+   "pure_rgb": [
+    0,
+    96,
+    175
+   ],
+   "tint_rgb": [
+    0,
+    135,
+    206
+   ],
+   "name_en_chart": "CERULEAN BLUE HUE",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H107",
+    "40ml": "H307",
+    "110ml": "HH307"
+   },
+   "ref20": "H107",
+   "name_jp": "ウルトラマリンライト",
+   "name_en": "ULTRAMARINE LIGHT",
+   "traditional": null,
+   "group": "青",
+   "series": "A",
+   "permanency": 3,
+   "admixing": "N",
+   "drying": 4,
+   "opacity": "半不透明",
+   "toxicity": null,
+   "pigments": "PB29",
+   "pure_rgb": [
+    26,
+    46,
+    117
+   ],
+   "tint_rgb": [
+    65,
+    119,
+    188
+   ],
+   "name_en_chart": "ULTRAMARINE LIGHT",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": "HH122",
+    "20ml": "H122",
+    "40ml": "H322",
+    "110ml": "HH322"
+   },
+   "ref20": "H122",
+   "name_jp": "ウルトラマリンブルー",
+   "name_en": "ULTRAMARINE BLUE",
+   "traditional": null,
+   "group": "青",
+   "series": "A",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 3,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PB29",
+   "pure_rgb": [
+    29,
+    33,
+    136
+   ],
+   "tint_rgb": [
+    58,
+    130,
+    196
+   ],
+   "name_en_chart": "ULTRAMARINE BLUE",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H108",
+    "40ml": "H308",
+    "110ml": "HH308"
+   },
+   "ref20": "H108",
+   "name_jp": "ウルトラマリンディープ",
+   "name_en": "ULTRAMARINE DEEP",
+   "traditional": null,
+   "group": "青",
+   "series": "A",
+   "permanency": 3,
+   "admixing": "N",
+   "drying": 4,
+   "opacity": "半不透明",
+   "toxicity": null,
+   "pigments": "PB29",
+   "pure_rgb": [
+    29,
+    35,
+    123
+   ],
+   "tint_rgb": [
+    20,
+    100,
+    175
+   ],
+   "name_en_chart": "ULTRAMARINE DEEP",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H123",
+    "40ml": "H323",
+    "110ml": "HH323"
+   },
+   "ref20": "H123",
+   "name_jp": "マンガニーズブルーノーバ",
+   "name_en": "MANGANESE BLUE NOVA",
+   "traditional": null,
+   "group": "青",
+   "series": "B",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 4,
+   "opacity": "半不透明",
+   "toxicity": null,
+   "pigments": "PB28+PB15",
+   "pure_rgb": [
+    0,
+    89,
+    142
+   ],
+   "tint_rgb": [
+    12,
+    176,
+    215
+   ],
+   "name_en_chart": "MANGANESE BLUE NOVA",
+   "price_20ml": 605
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H110",
+    "40ml": "H310",
+    "110ml": null
+   },
+   "ref20": "H110",
+   "name_jp": "バヂターブルー",
+   "name_en": "VERDITER BLUE",
+   "traditional": null,
+   "group": "青",
+   "series": "D",
+   "permanency": 4,
+   "admixing": null,
+   "drying": 3,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PB28+PW6",
+   "pure_rgb": [
+    93,
+    142,
+    202
+   ],
+   "tint_rgb": [
+    138,
+    180,
+    224
+   ],
+   "name_en_chart": "VERDITER BLUE",
+   "price_20ml": 1430
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H111",
+    "40ml": "H311",
+    "110ml": "HH311"
+   },
+   "ref20": "H111",
+   "name_jp": "コンポーズブルー",
+   "name_en": "COMPOSE BLUE",
+   "traditional": null,
+   "group": "青",
+   "series": "A",
+   "permanency": 2,
+   "admixing": null,
+   "drying": 2,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PB15+PW6",
+   "pure_rgb": [
+    0,
+    135,
+    193
+   ],
+   "tint_rgb": [
+    58,
+    177,
+    220
+   ],
+   "name_en_chart": "COMPOSE BLUE",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": "HH112",
+    "20ml": "H112",
+    "40ml": "H312",
+    "110ml": "HH312"
+   },
+   "ref20": "H112",
+   "name_jp": "プルシャンブルー",
+   "name_en": "PRUSSIAN BLUE",
+   "traditional": null,
+   "group": "青",
+   "series": "A",
+   "permanency": 2,
+   "admixing": null,
+   "drying": 4,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PB27",
+   "pure_rgb": [
+    4,
+    1,
+    6
+   ],
+   "tint_rgb": [
+    1,
+    74,
+    134
+   ],
+   "name_en_chart": "PRUSSIAN BLUE",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H124",
+    "40ml": "H324",
+    "110ml": "HH324"
+   },
+   "ref20": "H124",
+   "name_jp": "フタロブルー",
+   "name_en": "PHTHALO BLUE",
+   "traditional": null,
+   "group": "青",
+   "series": "B",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "透明",
+   "toxicity": null,
+   "pigments": "PB15",
+   "pure_rgb": [
+    9,
+    28,
+    55
+   ],
+   "tint_rgb": [
+    0,
+    96,
+    175
+   ],
+   "name_en_chart": "PHTHALO BLUE",
+   "price_20ml": 605
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H125",
+    "40ml": "H325",
+    "110ml": null
+   },
+   "ref20": "H125",
+   "name_jp": "インダンスレンブルー",
+   "name_en": "INDANTHRENE BLUE",
+   "traditional": null,
+   "group": "青",
+   "series": "D",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "透明",
+   "toxicity": null,
+   "pigments": "PB60",
+   "pure_rgb": [
+    21,
+    22,
+    33
+   ],
+   "tint_rgb": [
+    9,
+    89,
+    169
+   ],
+   "name_en_chart": "INDANTHRENE BLUE",
+   "price_20ml": 1430
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H114",
+    "40ml": "H314",
+    "110ml": "HH314"
+   },
+   "ref20": "H114",
+   "name_jp": "インジゴ",
+   "name_en": "INDIGO",
+   "traditional": null,
+   "group": "青",
+   "series": "B",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 3,
+   "opacity": "半不透明",
+   "toxicity": null,
+   "pigments": "PB15+PBk7+PR122",
+   "pure_rgb": [
+    12,
+    6,
+    15
+   ],
+   "tint_rgb": [
+    37,
+    81,
+    89
+   ],
+   "name_en_chart": "INDIGO",
+   "price_20ml": 605
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H116",
+    "40ml": "H316",
+    "110ml": null
+   },
+   "ref20": "H116",
+   "name_jp": "コバルトターコイズ",
+   "name_en": "COBALT TURQUOISE",
+   "traditional": null,
+   "group": "青",
+   "series": "E",
+   "permanency": 4,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PG50",
+   "pure_rgb": [
+    0,
+    139,
+    164
+   ],
+   "tint_rgb": [
+    0,
+    171,
+    197
+   ],
+   "name_en_chart": "COBALT TURQUOISE",
+   "price_20ml": 2310
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H115",
+    "40ml": "H315",
+    "110ml": "HH315"
+   },
+   "ref20": "H115",
+   "name_jp": "ターコイズブルー",
+   "name_en": "TURQUOISE BLUE",
+   "traditional": null,
+   "group": "青",
+   "series": "B",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 3,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PB28+PG7+PW6",
+   "pure_rgb": [
+    0,
+    155,
+    168
+   ],
+   "tint_rgb": [
+    115,
+    199,
+    202
+   ],
+   "name_en_chart": "TURQUOISE BLUE",
+   "price_20ml": 605
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H117",
+    "40ml": "H317",
+    "110ml": "HH317"
+   },
+   "ref20": "H117",
+   "name_jp": "ホリゾンブルー",
+   "name_en": "HORIZON BLUE",
+   "traditional": null,
+   "group": "青",
+   "series": "A",
+   "permanency": 2,
+   "admixing": null,
+   "drying": 3,
+   "opacity": "不透明",
+   "toxicity": null,
+   "pigments": "PB15+PW6",
+   "pure_rgb": [
+    102,
+    181,
+    199
+   ],
+   "tint_rgb": [
+    169,
+    220,
+    240
+   ],
+   "name_en_chart": "HORIZON BLUE",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H118",
+    "40ml": "H318",
+    "110ml": "HH318"
+   },
+   "ref20": "H118",
+   "name_jp": "ミスティブルー",
+   "name_en": "MISTY BLUE",
+   "traditional": null,
+   "group": "青",
+   "series": "A",
+   "permanency": 2,
+   "admixing": "N",
+   "drying": 2,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PB29+PW6",
+   "pure_rgb": [
+    182,
+    207,
+    221
+   ],
+   "tint_rgb": [
+    238,
+    244,
+    241
+   ],
+   "name_en_chart": "MISTY BLUE",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H129",
+    "40ml": "H329",
+    "110ml": null
+   },
+   "ref20": "H129",
+   "name_jp": "コバルトバイオレット",
+   "name_en": "COBALT VIOLET",
+   "traditional": null,
+   "group": "紫",
+   "series": "H",
+   "permanency": 4,
+   "admixing": null,
+   "drying": 2,
+   "opacity": "半不透明",
+   "toxicity": "コバルト",
+   "pigments": "PV47",
+   "pure_rgb": [
+    130,
+    37,
+    138
+   ],
+   "tint_rgb": [
+    205,
+    166,
+    203
+   ],
+   "name_en_chart": "COBALT VIOLET",
+   "price_20ml": 2530
+  },
+  {
+   "refs": {
+    "10ml": "HH132",
+    "20ml": "H132",
+    "40ml": "H332",
+    "110ml": "HH332"
+   },
+   "ref20": "H132",
+   "name_jp": "コバルトバイオレットライトヒュー",
+   "name_en": "COBALT VIOLET LIGHT HUE",
+   "traditional": null,
+   "group": "紫",
+   "series": "B",
+   "permanency": 1,
+   "admixing": null,
+   "drying": 2,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PR122+PB29+PW6",
+   "pure_rgb": [
+    106,
+    48,
+    128
+   ],
+   "tint_rgb": [
+    206,
+    153,
+    195
+   ],
+   "name_en_chart": "COBALT VIOLET LIGHT HUE",
+   "price_20ml": 605
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H135",
+    "40ml": "H335",
+    "110ml": "HH335"
+   },
+   "ref20": "H135",
+   "name_jp": "モーブ",
+   "name_en": "MAUVE",
+   "traditional": null,
+   "group": "紫",
+   "series": "B",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 4,
+   "opacity": "透明",
+   "toxicity": null,
+   "pigments": "PB29+PR122",
+   "pure_rgb": [
+    42,
+    20,
+    35
+   ],
+   "tint_rgb": [
+    152,
+    81,
+    142
+   ],
+   "name_en_chart": "MAUVE",
+   "price_20ml": 605
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H138",
+    "40ml": "H338",
+    "110ml": "HH338"
+   },
+   "ref20": "H138",
+   "name_jp": "ジオキサジンバイオレット",
+   "name_en": "DIOXAZINE VIOLET",
+   "traditional": null,
+   "group": "紫",
+   "series": "C",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "透明",
+   "toxicity": null,
+   "pigments": "PV23",
+   "pure_rgb": [
+    38,
+    8,
+    26
+   ],
+   "tint_rgb": [
+    86,
+    42,
+    139
+   ],
+   "name_en_chart": "DIOXAZINE VIOLET",
+   "price_20ml": 770
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H137",
+    "40ml": "H337",
+    "110ml": "HH337"
+   },
+   "ref20": "H137",
+   "name_jp": "キナクリドンマゼンタ",
+   "name_en": "QUINACRIDONE MAGENTA",
+   "traditional": null,
+   "group": "紫",
+   "series": "C",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "透明",
+   "toxicity": null,
+   "pigments": "PR122",
+   "pure_rgb": [
+    138,
+    37,
+    47
+   ],
+   "tint_rgb": [
+    214,
+    30,
+    134
+   ],
+   "name_en_chart": "QUINACRIDONE MAGENTA",
+   "price_20ml": 770
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H136",
+    "40ml": "H336",
+    "110ml": null
+   },
+   "ref20": "H136",
+   "name_jp": "ローズバイオレット",
+   "name_en": "ROSE VIOLET",
+   "traditional": null,
+   "group": "紫",
+   "series": "B",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 4,
+   "opacity": "半不透明",
+   "toxicity": null,
+   "pigments": "PR122+PW6",
+   "pure_rgb": [
+    185,
+    33,
+    101
+   ],
+   "tint_rgb": [
+    229,
+    114,
+    168
+   ],
+   "name_en_chart": "ROSE VIOLET",
+   "price_20ml": 605
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H139",
+    "40ml": "H339",
+    "110ml": "HH339"
+   },
+   "ref20": "H139",
+   "name_jp": "ライトマゼンタ",
+   "name_en": "LIGHT MAGENTA",
+   "traditional": null,
+   "group": "紫",
+   "series": "B",
+   "permanency": 2,
+   "admixing": null,
+   "drying": 3,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PV19+PW6",
+   "pure_rgb": [
+    235,
+    105,
+    143
+   ],
+   "tint_rgb": [
+    241,
+    154,
+    181
+   ],
+   "name_en_chart": "LIGHT MAGENTA",
+   "price_20ml": 605
+  },
+  {
+   "refs": {
+    "10ml": "HH140",
+    "20ml": "H140",
+    "40ml": "H340",
+    "110ml": "HH340"
+   },
+   "ref20": "H140",
+   "name_jp": "ライトレッド",
+   "name_en": "LIGHT RED",
+   "traditional": null,
+   "group": "茶黒",
+   "series": "A",
+   "permanency": 4,
+   "admixing": null,
+   "drying": 2,
+   "opacity": "不透明",
+   "toxicity": null,
+   "pigments": "PR101",
+   "pure_rgb": [
+    137,
+    53,
+    40
+   ],
+   "tint_rgb": [
+    166,
+    77,
+    65
+   ],
+   "name_en_chart": "LIGHT RED",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H142",
+    "40ml": "H342",
+    "110ml": "HH342"
+   },
+   "ref20": "H142",
+   "name_jp": "ローアンバー",
+   "name_en": "RAW UMBER",
+   "traditional": null,
+   "group": "茶黒",
+   "series": "A",
+   "permanency": 4,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PBr7",
+   "pure_rgb": [
+    63,
+    51,
+    46
+   ],
+   "tint_rgb": [
+    168,
+    159,
+    133
+   ],
+   "name_en_chart": "RAW UMBER",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H143",
+    "40ml": "H343",
+    "110ml": "HH343"
+   },
+   "ref20": "H143",
+   "name_jp": "ローシェンナ",
+   "name_en": "RAW SIENNA",
+   "traditional": null,
+   "group": "茶黒",
+   "series": "A",
+   "permanency": 4,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "半不透明",
+   "toxicity": null,
+   "pigments": "PY42+PBr7",
+   "pure_rgb": [
+    150,
+    89,
+    53
+   ],
+   "tint_rgb": [
+    226,
+    182,
+    105
+   ],
+   "name_en_chart": "RAW SIENNA",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": "HH144",
+    "20ml": "H144",
+    "40ml": "H344",
+    "110ml": "HH344"
+   },
+   "ref20": "H144",
+   "name_jp": "バーントアンバー",
+   "name_en": "BURNT UMBER",
+   "traditional": null,
+   "group": "茶黒",
+   "series": "A",
+   "permanency": 4,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PBr7+PR101",
+   "pure_rgb": [
+    61,
+    43,
+    38
+   ],
+   "tint_rgb": [
+    140,
+    95,
+    79
+   ],
+   "name_en_chart": "BURNT UMBER",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": "HH145",
+    "20ml": "H145",
+    "40ml": "H345",
+    "110ml": "HH345"
+   },
+   "ref20": "H145",
+   "name_jp": "バーントシェンナ",
+   "name_en": "BURNT SIENNA",
+   "traditional": null,
+   "group": "茶黒",
+   "series": "A",
+   "permanency": 4,
+   "admixing": null,
+   "drying": 2,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PBr7",
+   "pure_rgb": [
+    101,
+    55,
+    46
+   ],
+   "tint_rgb": [
+    172,
+    106,
+    76
+   ],
+   "name_en_chart": "BURNT SIENNA",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H146",
+    "40ml": "H346",
+    "110ml": null
+   },
+   "ref20": "H146",
+   "name_jp": "インデアンレッド",
+   "name_en": "INDIAN RED",
+   "traditional": null,
+   "group": "茶黒",
+   "series": "A",
+   "permanency": 4,
+   "admixing": null,
+   "drying": 2,
+   "opacity": "不透明",
+   "toxicity": null,
+   "pigments": "PR101",
+   "pure_rgb": [
+    129,
+    73,
+    58
+   ],
+   "tint_rgb": [
+    158,
+    96,
+    89
+   ],
+   "name_en_chart": "INDIAN RED",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H161",
+    "40ml": "H361",
+    "110ml": null
+   },
+   "ref20": "H161",
+   "name_jp": "トランスペアレントブラウンオキサイド",
+   "name_en": "TRANSPARENT BROWN OXIDE",
+   "traditional": null,
+   "group": "茶黒",
+   "series": "B",
+   "permanency": 4,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "透明",
+   "toxicity": null,
+   "pigments": "PR101",
+   "pure_rgb": [
+    45,
+    27,
+    13
+   ],
+   "tint_rgb": [
+    145,
+    72,
+    39
+   ],
+   "name_en_chart": "TRANSPARENT BROWN OXIDE",
+   "price_20ml": 605
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H151",
+    "40ml": "H351",
+    "110ml": "HH351"
+   },
+   "ref20": "H151",
+   "name_jp": "セピア",
+   "name_en": "SEPIA",
+   "traditional": null,
+   "group": "茶黒",
+   "series": "A",
+   "permanency": 4,
+   "admixing": null,
+   "drying": 4,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PBr25+PBk7",
+   "pure_rgb": [
+    7,
+    13,
+    13
+   ],
+   "tint_rgb": [
+    110,
+    115,
+    112
+   ],
+   "name_en_chart": "SEPIA",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H152",
+    "40ml": "H352",
+    "110ml": "HH352"
+   },
+   "ref20": "H152",
+   "name_jp": "バンダイキブラウン",
+   "name_en": "VANDYKE BROWN",
+   "traditional": null,
+   "group": "茶黒",
+   "series": "A",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 4,
+   "opacity": "半不透明",
+   "toxicity": null,
+   "pigments": "PBr7+PBr25+PBk7",
+   "pure_rgb": [
+    33,
+    37,
+    38
+   ],
+   "tint_rgb": [
+    91,
+    87,
+    84
+   ],
+   "name_en_chart": "VANDYKE BROWN",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H157",
+    "40ml": "H357",
+    "110ml": null
+   },
+   "ref20": "H157",
+   "name_jp": "ブルーブラック",
+   "name_en": "BLUE BLACK",
+   "traditional": null,
+   "group": "茶黒",
+   "series": "A",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 4,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PB29+PBk7",
+   "pure_rgb": [
+    0,
+    0,
+    6
+   ],
+   "tint_rgb": [
+    58,
+    98,
+    130
+   ],
+   "name_en_chart": "BLUE BLACK",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H153",
+    "40ml": "H353",
+    "110ml": "HH353"
+   },
+   "ref20": "H153",
+   "name_jp": "ピーチブラック",
+   "name_en": "PEACH BLACK",
+   "traditional": null,
+   "group": "茶黒",
+   "series": "A",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 2,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PBk1",
+   "pure_rgb": [
+    16,
+    10,
+    18
+   ],
+   "tint_rgb": [
+    77,
+    89,
+    103
+   ],
+   "name_en_chart": "PEACH BLACK",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": "HH154",
+    "20ml": "H154",
+    "40ml": "H354",
+    "110ml": "HH354"
+   },
+   "ref20": "H154",
+   "name_jp": "アイボリブラック",
+   "name_en": "IVORY BLACK",
+   "traditional": null,
+   "group": "茶黒",
+   "series": "A",
+   "permanency": 4,
+   "admixing": null,
+   "drying": 4,
+   "opacity": "不透明",
+   "toxicity": null,
+   "pigments": "PBk9+PBk7",
+   "pure_rgb": [
+    12,
+    14,
+    16
+   ],
+   "tint_rgb": [
+    79,
+    83,
+    100
+   ],
+   "name_en_chart": "IVORY BLACK",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H156",
+    "40ml": "H356",
+    "110ml": null
+   },
+   "ref20": "H156",
+   "name_jp": "ランプブラック",
+   "name_en": "LAMP BLACK",
+   "traditional": null,
+   "group": "茶黒",
+   "series": "A",
+   "permanency": 4,
+   "admixing": null,
+   "drying": 2,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PBk6",
+   "pure_rgb": [
+    30,
+    39,
+    42
+   ],
+   "tint_rgb": [
+    51,
+    59,
+    69
+   ],
+   "name_en_chart": "LAMP BLACK",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H170",
+    "40ml": "H370",
+    "110ml": "HH370"
+   },
+   "ref20": "H170",
+   "name_jp": "ブルーグレイ",
+   "name_en": "BLUE GREY",
+   "traditional": null,
+   "group": "灰",
+   "series": "A",
+   "permanency": 2,
+   "admixing": "N",
+   "drying": 3,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PB29+PW6",
+   "pure_rgb": [
+    60,
+    155,
+    210
+   ],
+   "tint_rgb": [
+    123,
+    189,
+    231
+   ],
+   "name_en_chart": "BLUE GREY",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H174",
+    "40ml": "H374",
+    "110ml": "HH374"
+   },
+   "ref20": "H174",
+   "name_jp": "バイオレットグレイ",
+   "name_en": "VIOLET GREY",
+   "traditional": null,
+   "group": "灰",
+   "series": "A",
+   "permanency": 2,
+   "admixing": "N",
+   "drying": 4,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PV15+PW6",
+   "pure_rgb": [
+    115,
+    147,
+    203
+   ],
+   "tint_rgb": [
+    171,
+    195,
+    228
+   ],
+   "name_en_chart": "VIOLET GREY",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H176",
+    "40ml": "H376",
+    "110ml": "HH376"
+   },
+   "ref20": "H176",
+   "name_jp": "ローズグレイ",
+   "name_en": "ROSE GREY",
+   "traditional": null,
+   "group": "灰",
+   "series": "A",
+   "permanency": 4,
+   "admixing": null,
+   "drying": 4,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PR101+PW6",
+   "pure_rgb": [
+    158,
+    97,
+    96
+   ],
+   "tint_rgb": [
+    193,
+    143,
+    142
+   ],
+   "name_en_chart": "ROSE GREY",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H178",
+    "40ml": "H378",
+    "110ml": "HH378"
+   },
+   "ref20": "H178",
+   "name_jp": "モノクロームチントウォーム",
+   "name_en": "MONOCHROME TINT WARM",
+   "traditional": null,
+   "group": "灰",
+   "series": "A",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 3,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PY119+PW6",
+   "pure_rgb": [
+    164,
+    153,
+    92
+   ],
+   "tint_rgb": [
+    209,
+    198,
+    146
+   ],
+   "name_en_chart": "MONOCHROME TINT WARM",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H179",
+    "40ml": "H379",
+    "110ml": "HH379"
+   },
+   "ref20": "H179",
+   "name_jp": "モノクロームチントクール",
+   "name_en": "MONOCHROME TINT COOL",
+   "traditional": null,
+   "group": "灰",
+   "series": "A",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 3,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PBk11+PW6",
+   "pure_rgb": [
+    118,
+    123,
+    115
+   ],
+   "tint_rgb": [
+    160,
+    167,
+    165
+   ],
+   "name_en_chart": "MONOCHROME TINT COOL",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H169",
+    "40ml": "H369",
+    "110ml": "HH369"
+   },
+   "ref20": "H169",
+   "name_jp": "ニュートラルグレイ",
+   "name_en": "NEUTRAL GREY",
+   "traditional": null,
+   "group": "灰",
+   "series": "A",
+   "permanency": 2,
+   "admixing": null,
+   "drying": 3,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PY42+PBk9+PW6",
+   "pure_rgb": [
+    189,
+    201,
+    208
+   ],
+   "tint_rgb": [
+    204,
+    215,
+    216
+   ],
+   "name_en_chart": "NEUTRAL GREY",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H173",
+    "40ml": "H373",
+    "110ml": "HH373"
+   },
+   "ref20": "H173",
+   "name_jp": "グレイオブグレイ",
+   "name_en": "GREY OF GREY",
+   "traditional": null,
+   "group": "灰",
+   "series": "A",
+   "permanency": 2,
+   "admixing": null,
+   "drying": 4,
+   "opacity": "半透明",
+   "toxicity": "コバルト",
+   "pigments": "PV47+PBk1+PW6",
+   "pure_rgb": [
+    162,
+    174,
+    183
+   ],
+   "tint_rgb": [
+    206,
+    216,
+    218
+   ],
+   "name_en_chart": "GREY OF GREY",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H180",
+    "40ml": "H380",
+    "110ml": null
+   },
+   "ref20": "H180",
+   "name_jp": "ペインズグレイ",
+   "name_en": "PAYNE'S GREY",
+   "traditional": null,
+   "group": "灰",
+   "series": "A",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 2,
+   "opacity": "半透明",
+   "toxicity": null,
+   "pigments": "PB29+PBk11",
+   "pure_rgb": [
+    29,
+    27,
+    29
+   ],
+   "tint_rgb": [
+    110,
+    131,
+    145
+   ],
+   "name_en_chart": "PAYNE'S GREY",
+   "price_20ml": 550
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H190",
+    "40ml": "H390",
+    "110ml": null
+   },
+   "ref20": "H190",
+   "name_jp": "ゴールド",
+   "name_en": "GOLD",
+   "traditional": null,
+   "group": "金銀",
+   "series": "E",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": null,
+   "toxicity": null,
+   "pigments": "PW20+PM1",
+   "pure_rgb": [
+    168,
+    147,
+    76
+   ],
+   "tint_rgb": [
+    147,
+    124,
+    63
+   ],
+   "name_en_chart": "GOLD",
+   "price_20ml": 2310
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H191",
+    "40ml": "H391",
+    "110ml": null
+   },
+   "ref20": "H191",
+   "name_jp": "シルバー",
+   "name_en": "SILVER",
+   "traditional": null,
+   "group": "金銀",
+   "series": "E",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": null,
+   "toxicity": null,
+   "pigments": "PM1",
+   "pure_rgb": [
+    206,
+    204,
+    196
+   ],
+   "tint_rgb": [
+    207,
+    205,
+    198
+   ],
+   "name_en_chart": "SILVER",
+   "price_20ml": 2310
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H181",
+    "40ml": null,
+    "110ml": null
+   },
+   "ref20": "H181",
+   "name_jp": "アンティークレッド",
+   "name_en": "ANTIQUE RED",
+   "traditional": "紅辰砂",
+   "group": "アンティーク",
+   "series": "L",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 2,
+   "opacity": "半不透明",
+   "toxicity": "コバルト",
+   "pigments": "",
+   "pure_rgb": [
+    160,
+    43,
+    64
+   ],
+   "tint_rgb": [
+    201,
+    83,
+    112
+   ],
+   "name_en_chart": "ANTIQUE RED",
+   "price_20ml": 3300
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H183",
+    "40ml": null,
+    "110ml": null
+   },
+   "ref20": "H183",
+   "name_jp": "アンティークイエローNo.1",
+   "name_en": "ANTIQUE YELLOW No.1",
+   "traditional": "樺茶",
+   "group": "アンティーク",
+   "series": "L",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 2,
+   "opacity": "半不透明",
+   "toxicity": "コバルト",
+   "pigments": "",
+   "pure_rgb": [
+    233,
+    151,
+    50
+   ],
+   "tint_rgb": [
+    251,
+    220,
+    154
+   ],
+   "name_en_chart": "",
+   "price_20ml": 3300
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H184",
+    "40ml": null,
+    "110ml": null
+   },
+   "ref20": "H184",
+   "name_jp": "アンティークイエローNo.2",
+   "name_en": "ANTIQUE YELLOW No.2",
+   "traditional": "黄茶緑",
+   "group": "アンティーク",
+   "series": "L",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 2,
+   "opacity": "半不透明",
+   "toxicity": "コバルト",
+   "pigments": "",
+   "pure_rgb": [
+    175,
+    153,
+    55
+   ],
+   "tint_rgb": [
+    242,
+    230,
+    157
+   ],
+   "name_en_chart": "",
+   "price_20ml": 3300
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H185",
+    "40ml": null,
+    "110ml": null
+   },
+   "ref20": "H185",
+   "name_jp": "アンティークグリーン",
+   "name_en": "ANTIQUE GREEN",
+   "traditional": "裏葉緑青",
+   "group": "アンティーク",
+   "series": "L",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 2,
+   "opacity": "半不透明",
+   "toxicity": "コバルト",
+   "pigments": "",
+   "pure_rgb": [
+    40,
+    142,
+    89
+   ],
+   "tint_rgb": [
+    166,
+    210,
+    182
+   ],
+   "name_en_chart": "ANTIQUE GREEN",
+   "price_20ml": 3300
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H187",
+    "40ml": null,
+    "110ml": null
+   },
+   "ref20": "H187",
+   "name_jp": "アンティークブルーNo.1",
+   "name_en": "ANTIQUE BLUE No.1",
+   "traditional": "白群",
+   "group": "アンティーク",
+   "series": "L",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 2,
+   "opacity": "半不透明",
+   "toxicity": "コバルト",
+   "pigments": "",
+   "pure_rgb": [
+    0,
+    83,
+    148
+   ],
+   "tint_rgb": [
+    135,
+    192,
+    233
+   ],
+   "name_en_chart": "",
+   "price_20ml": 3300
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H188",
+    "40ml": null,
+    "110ml": null
+   },
+   "ref20": "H188",
+   "name_jp": "アンティークブルーNo.2",
+   "name_en": "ANTIQUE BLUE No.2",
+   "traditional": "浅黄群青",
+   "group": "アンティーク",
+   "series": "L",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 2,
+   "opacity": "半不透明",
+   "toxicity": "コバルト",
+   "pigments": "",
+   "pure_rgb": [
+    4,
+    102,
+    151
+   ],
+   "tint_rgb": [
+    151,
+    202,
+    224
+   ],
+   "name_en_chart": "",
+   "price_20ml": 3300
+  },
+  {
+   "refs": {
+    "10ml": null,
+    "20ml": "H189",
+    "40ml": null,
+    "110ml": null
+   },
+   "ref20": "H189",
+   "name_jp": "アンティークブルーNo.3",
+   "name_en": "ANTIQUE BLUE No.3",
+   "traditional": "藍群青",
+   "group": "アンティーク",
+   "series": "L",
+   "permanency": 3,
+   "admixing": null,
+   "drying": 1,
+   "opacity": "半不透明",
+   "toxicity": "コバルト",
+   "pigments": "",
+   "pure_rgb": [
+    28,
+    30,
+    44
+   ],
+   "tint_rgb": [
+    141,
+    166,
+    193
+   ],
+   "name_en_chart": "",
+   "price_20ml": 3300
+  }
+ ]
+}

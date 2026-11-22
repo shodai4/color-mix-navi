@@ -1,0 +1,1003 @@
+{
+ "colors": [
+  {
+   "ref": "H001",
+   "name": "クリムソンレーキ",
+   "drying": 1,
+   "opacity": "透明",
+   "dE_pure": 0.001,
+   "dE_tint": 0.001,
+   "scatter": 0.178
+  },
+  {
+   "ref": "H002",
+   "name": "カーマイン",
+   "drying": 1,
+   "opacity": "透明",
+   "dE_pure": 0.572,
+   "dE_tint": 0.328,
+   "scatter": 0.069
+  },
+  {
+   "ref": "H004",
+   "name": "ローズマダー",
+   "drying": 1,
+   "opacity": "透明",
+   "dE_pure": 0.209,
+   "dE_tint": 0.2,
+   "scatter": 0.127
+  },
+  {
+   "ref": "H028",
+   "name": "ピロールレッド",
+   "drying": 1,
+   "opacity": "半透明",
+   "dE_pure": 0.001,
+   "dE_tint": 0.002,
+   "scatter": 0.256
+  },
+  {
+   "ref": "H029",
+   "name": "ピロールレッドトランスペアレント",
+   "drying": 1,
+   "opacity": "透明",
+   "dE_pure": 0.641,
+   "dE_tint": 1.203,
+   "scatter": 0.171
+  },
+  {
+   "ref": "H007",
+   "name": "カドミウムレッド",
+   "drying": 4,
+   "opacity": "不透明",
+   "dE_pure": 0.771,
+   "dE_tint": 0.926,
+   "scatter": 0.787
+  },
+  {
+   "ref": "H009",
+   "name": "カドミウムレッドディープ",
+   "drying": 4,
+   "opacity": "不透明",
+   "dE_pure": 0.026,
+   "dE_tint": 0.015,
+   "scatter": 0.722
+  },
+  {
+   "ref": "H011",
+   "name": "カドミウムレッドパープル",
+   "drying": 4,
+   "opacity": "不透明",
+   "dE_pure": 0.126,
+   "dE_tint": 0.24,
+   "scatter": 0.152
+  },
+  {
+   "ref": "H015",
+   "name": "バーミリオン",
+   "drying": 3,
+   "opacity": "不透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.333
+  },
+  {
+   "ref": "H018",
+   "name": "バーミリオンヒュー",
+   "drying": 1,
+   "opacity": "半透明",
+   "dE_pure": 0.17,
+   "dE_tint": 0.029,
+   "scatter": 0.349
+  },
+  {
+   "ref": "H022",
+   "name": "ブライトレッド",
+   "drying": 1,
+   "opacity": "半透明",
+   "dE_pure": 0.481,
+   "dE_tint": 0.568,
+   "scatter": 0.407
+  },
+  {
+   "ref": "H020",
+   "name": "キナクリドンレッド",
+   "drying": 1,
+   "opacity": "透明",
+   "dE_pure": 0.103,
+   "dE_tint": 0.136,
+   "scatter": 0.097
+  },
+  {
+   "ref": "H127",
+   "name": "キナクリドンオペラ",
+   "drying": 1,
+   "opacity": "半不透明",
+   "dE_pure": 0.001,
+   "dE_tint": 0.001,
+   "scatter": 0.048
+  },
+  {
+   "ref": "H021",
+   "name": "ブリリアントピンク",
+   "drying": 3,
+   "opacity": "半透明",
+   "dE_pure": 0.001,
+   "dE_tint": 0.0,
+   "scatter": 0.144
+  },
+  {
+   "ref": "H026",
+   "name": "シェルピンク",
+   "drying": 3,
+   "opacity": "半透明",
+   "dE_pure": 0.001,
+   "dE_tint": 0.001,
+   "scatter": 0.526
+  },
+  {
+   "ref": "H057",
+   "name": "カドミウムオレンジ",
+   "drying": 4,
+   "opacity": "不透明",
+   "dE_pure": 0.462,
+   "dE_tint": 0.37,
+   "scatter": 0.504
+  },
+  {
+   "ref": "H046",
+   "name": "パーマネントオレンジ",
+   "drying": 1,
+   "opacity": "半透明",
+   "dE_pure": 0.05,
+   "dE_tint": 0.051,
+   "scatter": 0.95
+  },
+  {
+   "ref": "H062",
+   "name": "ピロールオレンジ",
+   "drying": 1,
+   "opacity": "半透明",
+   "dE_pure": 0.19,
+   "dE_tint": 0.178,
+   "scatter": 1.0
+  },
+  {
+   "ref": "H030",
+   "name": "ネイプルスイエロー",
+   "drying": 3,
+   "opacity": "半透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.001,
+   "scatter": 0.22
+  },
+  {
+   "ref": "H061",
+   "name": "アイボリホワイト",
+   "drying": 3,
+   "opacity": "半透明",
+   "dE_pure": 0.161,
+   "dE_tint": 0.73,
+   "scatter": 0.319
+  },
+  {
+   "ref": "H034",
+   "name": "ジョーンブリヤン No.2",
+   "drying": 1,
+   "opacity": "半透明",
+   "dE_pure": 0.001,
+   "dE_tint": 0.002,
+   "scatter": 0.205
+  },
+  {
+   "ref": "H035",
+   "name": "ジョーンブリヤン No.3",
+   "drying": 1,
+   "opacity": "半透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.348
+  },
+  {
+   "ref": "H037",
+   "name": "レモンイエロー",
+   "drying": 3,
+   "opacity": "半透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.001,
+   "scatter": 0.053
+  },
+  {
+   "ref": "H040",
+   "name": "イエローオーカー",
+   "drying": 2,
+   "opacity": "不透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.442
+  },
+  {
+   "ref": "H066",
+   "name": "ポリアゾイエロー",
+   "drying": 1,
+   "opacity": "透明",
+   "dE_pure": 0.087,
+   "dE_tint": 0.567,
+   "scatter": 0.067
+  },
+  {
+   "ref": "H067",
+   "name": "イミダゾロンイエロー",
+   "drying": 1,
+   "opacity": "半不透明",
+   "dE_pure": 0.008,
+   "dE_tint": 0.009,
+   "scatter": 0.397
+  },
+  {
+   "ref": "H043",
+   "name": "パーマネントイエローレモン",
+   "drying": 1,
+   "opacity": "半透明",
+   "dE_pure": 0.018,
+   "dE_tint": 0.211,
+   "scatter": 0.02
+  },
+  {
+   "ref": "H044",
+   "name": "パーマネントイエローライト",
+   "drying": 1,
+   "opacity": "半透明",
+   "dE_pure": 0.074,
+   "dE_tint": 0.133,
+   "scatter": 0.663
+  },
+  {
+   "ref": "H058",
+   "name": "パーマネントイエロー",
+   "drying": 1,
+   "opacity": "半透明",
+   "dE_pure": 0.002,
+   "dE_tint": 0.002,
+   "scatter": 0.141
+  },
+  {
+   "ref": "H048",
+   "name": "オーレオリン",
+   "drying": 3,
+   "opacity": "半不透明",
+   "dE_pure": 0.01,
+   "dE_tint": 0.029,
+   "scatter": 0.154
+  },
+  {
+   "ref": "H049",
+   "name": "カドミウムイエローレモン",
+   "drying": 4,
+   "opacity": "不透明",
+   "dE_pure": 0.016,
+   "dE_tint": 0.316,
+   "scatter": 0.02
+  },
+  {
+   "ref": "H052",
+   "name": "カドミウムイエロー",
+   "drying": 4,
+   "opacity": "不透明",
+   "dE_pure": 0.002,
+   "dE_tint": 0.002,
+   "scatter": 0.683
+  },
+  {
+   "ref": "H068",
+   "name": "ニッケルアゾイエロー",
+   "drying": 1,
+   "opacity": "透明",
+   "dE_pure": 2.427,
+   "dE_tint": 5.125,
+   "scatter": 0.033
+  },
+  {
+   "ref": "H069",
+   "name": "イソインドリノンイエロー",
+   "drying": 1,
+   "opacity": "透明",
+   "dE_pure": 0.138,
+   "dE_tint": 0.863,
+   "scatter": 0.097
+  },
+  {
+   "ref": "H047",
+   "name": "グリニッシュイエロー",
+   "drying": 4,
+   "opacity": "半透明",
+   "dE_pure": 2.392,
+   "dE_tint": 2.329,
+   "scatter": 0.033
+  },
+  {
+   "ref": "H070",
+   "name": "ビリジャン",
+   "drying": 1,
+   "opacity": "半不透明",
+   "dE_pure": 0.26,
+   "dE_tint": 0.353,
+   "scatter": 0.04
+  },
+  {
+   "ref": "H071",
+   "name": "ビリジャンヒュー",
+   "drying": 2,
+   "opacity": "半不透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.129
+  },
+  {
+   "ref": "H094",
+   "name": "フタログリーン",
+   "drying": 4,
+   "opacity": "透明",
+   "dE_pure": 3.54,
+   "dE_tint": 6.959,
+   "scatter": 0.049
+  },
+  {
+   "ref": "H074",
+   "name": "エメラルドグリーンノーバ",
+   "drying": 2,
+   "opacity": "半透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.184
+  },
+  {
+   "ref": "H075",
+   "name": "テールベルト",
+   "drying": 3,
+   "opacity": "半透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.093
+  },
+  {
+   "ref": "H076",
+   "name": "サップグリーン",
+   "drying": 1,
+   "opacity": "透明",
+   "dE_pure": 5.81,
+   "dE_tint": 2.599,
+   "scatter": 0.02
+  },
+  {
+   "ref": "H077",
+   "name": "パーマネントグリーンライト",
+   "drying": 1,
+   "opacity": "半透明",
+   "dE_pure": 0.463,
+   "dE_tint": 0.157,
+   "scatter": 0.282
+  },
+  {
+   "ref": "H078",
+   "name": "パーマネントグリーンペール",
+   "drying": 1,
+   "opacity": "半透明",
+   "dE_pure": 0.443,
+   "dE_tint": 0.542,
+   "scatter": 0.486
+  },
+  {
+   "ref": "H079",
+   "name": "パーマネントグリーン",
+   "drying": 1,
+   "opacity": "半不透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.284
+  },
+  {
+   "ref": "H080",
+   "name": "パーマネントグリーンディープ",
+   "drying": 1,
+   "opacity": "半不透明",
+   "dE_pure": 0.025,
+   "dE_tint": 0.028,
+   "scatter": 0.026
+  },
+  {
+   "ref": "H096",
+   "name": "カドミウムグリーンライト",
+   "drying": 1,
+   "opacity": "半透明",
+   "dE_pure": 0.006,
+   "dE_tint": 0.019,
+   "scatter": 0.565
+  },
+  {
+   "ref": "H082",
+   "name": "カドミウムグリーン",
+   "drying": 1,
+   "opacity": "不透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.054
+  },
+  {
+   "ref": "H100",
+   "name": "ペリレングリーン",
+   "drying": 1,
+   "opacity": "半不透明",
+   "dE_pure": 0.936,
+   "dE_tint": 0.319,
+   "scatter": 0.101
+  },
+  {
+   "ref": "H088",
+   "name": "オキサイドオブクロミウム",
+   "drying": 2,
+   "opacity": "不透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.596
+  },
+  {
+   "ref": "H092",
+   "name": "シナバーグリーン",
+   "drying": 2,
+   "opacity": "半透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.198
+  },
+  {
+   "ref": "H091",
+   "name": "シナバーグリーンライト",
+   "drying": 1,
+   "opacity": "半透明",
+   "dE_pure": 0.034,
+   "dE_tint": 0.28,
+   "scatter": 0.02
+  },
+  {
+   "ref": "H084",
+   "name": "コンポーズグリーン",
+   "drying": 2,
+   "opacity": "半透明",
+   "dE_pure": 0.001,
+   "dE_tint": 0.001,
+   "scatter": 0.892
+  },
+  {
+   "ref": "H101",
+   "name": "コバルトブルー",
+   "drying": 1,
+   "opacity": "半透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.001,
+   "scatter": 0.067
+  },
+  {
+   "ref": "H104",
+   "name": "コバルトブルーヒュー",
+   "drying": 4,
+   "opacity": "半透明",
+   "dE_pure": 0.296,
+   "dE_tint": 0.472,
+   "scatter": 0.124
+  },
+  {
+   "ref": "H105",
+   "name": "セルリアンブルー",
+   "drying": 3,
+   "opacity": "半透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.001,
+   "scatter": 0.208
+  },
+  {
+   "ref": "H106",
+   "name": "セルリアンブルーヒュー",
+   "drying": 2,
+   "opacity": "半透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.481
+  },
+  {
+   "ref": "H107",
+   "name": "ウルトラマリンライト",
+   "drying": 4,
+   "opacity": "半不透明",
+   "dE_pure": 0.03,
+   "dE_tint": 0.052,
+   "scatter": 0.143
+  },
+  {
+   "ref": "H122",
+   "name": "ウルトラマリンブルー",
+   "drying": 3,
+   "opacity": "半透明",
+   "dE_pure": 0.482,
+   "dE_tint": 0.561,
+   "scatter": 0.03
+  },
+  {
+   "ref": "H108",
+   "name": "ウルトラマリンディープ",
+   "drying": 4,
+   "opacity": "半不透明",
+   "dE_pure": 0.002,
+   "dE_tint": 0.001,
+   "scatter": 0.125
+  },
+  {
+   "ref": "H123",
+   "name": "マンガニーズブルーノーバ",
+   "drying": 4,
+   "opacity": "半不透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.079
+  },
+  {
+   "ref": "H110",
+   "name": "バヂターブルー",
+   "drying": 3,
+   "opacity": "半透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.427
+  },
+  {
+   "ref": "H111",
+   "name": "コンポーズブルー",
+   "drying": 2,
+   "opacity": "半透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.359
+  },
+  {
+   "ref": "H112",
+   "name": "プルシャンブルー",
+   "drying": 4,
+   "opacity": "半透明",
+   "dE_pure": 4.558,
+   "dE_tint": 3.826,
+   "scatter": 0.028
+  },
+  {
+   "ref": "H124",
+   "name": "フタロブルー",
+   "drying": 1,
+   "opacity": "透明",
+   "dE_pure": 0.07,
+   "dE_tint": 0.152,
+   "scatter": 0.033
+  },
+  {
+   "ref": "H125",
+   "name": "インダンスレンブルー",
+   "drying": 1,
+   "opacity": "透明",
+   "dE_pure": 3.317,
+   "dE_tint": 4.359,
+   "scatter": 0.044
+  },
+  {
+   "ref": "H114",
+   "name": "インジゴ",
+   "drying": 3,
+   "opacity": "半不透明",
+   "dE_pure": 2.544,
+   "dE_tint": 1.124,
+   "scatter": 0.063
+  },
+  {
+   "ref": "H116",
+   "name": "コバルトターコイズ",
+   "drying": 1,
+   "opacity": "半透明",
+   "dE_pure": 0.001,
+   "dE_tint": 0.0,
+   "scatter": 0.398
+  },
+  {
+   "ref": "H115",
+   "name": "ターコイズブルー",
+   "drying": 3,
+   "opacity": "半透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.289
+  },
+  {
+   "ref": "H117",
+   "name": "ホリゾンブルー",
+   "drying": 3,
+   "opacity": "不透明",
+   "dE_pure": 0.001,
+   "dE_tint": 0.001,
+   "scatter": 0.034
+  },
+  {
+   "ref": "H118",
+   "name": "ミスティブルー",
+   "drying": 2,
+   "opacity": "半透明",
+   "dE_pure": 0.003,
+   "dE_tint": 0.033,
+   "scatter": 0.02
+  },
+  {
+   "ref": "H129",
+   "name": "コバルトバイオレット",
+   "drying": 2,
+   "opacity": "半不透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.026
+  },
+  {
+   "ref": "H132",
+   "name": "コバルトバイオレットライトヒュー",
+   "drying": 2,
+   "opacity": "半透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.032
+  },
+  {
+   "ref": "H135",
+   "name": "モーブ",
+   "drying": 4,
+   "opacity": "透明",
+   "dE_pure": 1.87,
+   "dE_tint": 1.232,
+   "scatter": 0.028
+  },
+  {
+   "ref": "H138",
+   "name": "ジオキサジンバイオレット",
+   "drying": 1,
+   "opacity": "透明",
+   "dE_pure": 4.217,
+   "dE_tint": 4.411,
+   "scatter": 0.042
+  },
+  {
+   "ref": "H137",
+   "name": "キナクリドンマゼンタ",
+   "drying": 1,
+   "opacity": "透明",
+   "dE_pure": 1.486,
+   "dE_tint": 1.578,
+   "scatter": 0.056
+  },
+  {
+   "ref": "H136",
+   "name": "ローズバイオレット",
+   "drying": 4,
+   "opacity": "半不透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.163
+  },
+  {
+   "ref": "H139",
+   "name": "ライトマゼンタ",
+   "drying": 3,
+   "opacity": "半透明",
+   "dE_pure": 0.001,
+   "dE_tint": 0.001,
+   "scatter": 0.415
+  },
+  {
+   "ref": "H140",
+   "name": "ライトレッド",
+   "drying": 2,
+   "opacity": "不透明",
+   "dE_pure": 0.348,
+   "dE_tint": 0.358,
+   "scatter": 0.636
+  },
+  {
+   "ref": "H142",
+   "name": "ローアンバー",
+   "drying": 1,
+   "opacity": "半透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.028
+  },
+  {
+   "ref": "H143",
+   "name": "ローシェンナ",
+   "drying": 1,
+   "opacity": "半不透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.075
+  },
+  {
+   "ref": "H144",
+   "name": "バーントアンバー",
+   "drying": 1,
+   "opacity": "半透明",
+   "dE_pure": 1.528,
+   "dE_tint": 1.241,
+   "scatter": 0.116
+  },
+  {
+   "ref": "H145",
+   "name": "バーントシェンナ",
+   "drying": 2,
+   "opacity": "半透明",
+   "dE_pure": 0.134,
+   "dE_tint": 0.14,
+   "scatter": 0.193
+  },
+  {
+   "ref": "H146",
+   "name": "インデアンレッド",
+   "drying": 2,
+   "opacity": "不透明",
+   "dE_pure": 0.293,
+   "dE_tint": 0.226,
+   "scatter": 0.575
+  },
+  {
+   "ref": "H161",
+   "name": "トランスペアレントブラウンオキサイド",
+   "drying": 1,
+   "opacity": "透明",
+   "dE_pure": 4.505,
+   "dE_tint": 2.541,
+   "scatter": 0.044
+  },
+  {
+   "ref": "H151",
+   "name": "セピア",
+   "drying": 4,
+   "opacity": "半透明",
+   "dE_pure": 1.978,
+   "dE_tint": 0.852,
+   "scatter": 0.02
+  },
+  {
+   "ref": "H152",
+   "name": "バンダイキブラウン",
+   "drying": 4,
+   "opacity": "半不透明",
+   "dE_pure": 0.976,
+   "dE_tint": 0.629,
+   "scatter": 0.14
+  },
+  {
+   "ref": "H157",
+   "name": "ブルーブラック",
+   "drying": 4,
+   "opacity": "半透明",
+   "dE_pure": 2.562,
+   "dE_tint": 1.277,
+   "scatter": 0.02
+  },
+  {
+   "ref": "H153",
+   "name": "ピーチブラック",
+   "drying": 2,
+   "opacity": "半透明",
+   "dE_pure": 4.156,
+   "dE_tint": 1.081,
+   "scatter": 0.02
+  },
+  {
+   "ref": "H154",
+   "name": "アイボリブラック",
+   "drying": 4,
+   "opacity": "不透明",
+   "dE_pure": 1.532,
+   "dE_tint": 0.559,
+   "scatter": 0.02
+  },
+  {
+   "ref": "H156",
+   "name": "ランプブラック",
+   "drying": 2,
+   "opacity": "半透明",
+   "dE_pure": 1.177,
+   "dE_tint": 0.927,
+   "scatter": 0.513
+  },
+  {
+   "ref": "H170",
+   "name": "ブルーグレイ",
+   "drying": 3,
+   "opacity": "半透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.338
+  },
+  {
+   "ref": "H174",
+   "name": "バイオレットグレイ",
+   "drying": 4,
+   "opacity": "半透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.27
+  },
+  {
+   "ref": "H176",
+   "name": "ローズグレイ",
+   "drying": 4,
+   "opacity": "半透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.401
+  },
+  {
+   "ref": "H178",
+   "name": "モノクロームチントウォーム",
+   "drying": 3,
+   "opacity": "半透明",
+   "dE_pure": 0.001,
+   "dE_tint": 0.002,
+   "scatter": 0.257
+  },
+  {
+   "ref": "H179",
+   "name": "モノクロームチントクール",
+   "drying": 3,
+   "opacity": "半透明",
+   "dE_pure": 0.001,
+   "dE_tint": 0.001,
+   "scatter": 0.325
+  },
+  {
+   "ref": "H169",
+   "name": "ニュートラルグレイ",
+   "drying": 3,
+   "opacity": "半透明",
+   "dE_pure": 0.005,
+   "dE_tint": 0.007,
+   "scatter": 1.0
+  },
+  {
+   "ref": "H173",
+   "name": "グレイオブグレイ",
+   "drying": 4,
+   "opacity": "半透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.217
+  },
+  {
+   "ref": "H180",
+   "name": "ペインズグレイ",
+   "drying": 2,
+   "opacity": "半透明",
+   "dE_pure": 0.293,
+   "dE_tint": 0.161,
+   "scatter": 0.02
+  },
+  {
+   "ref": "H190",
+   "name": "ゴールド",
+   "drying": 1,
+   "opacity": "不透明",
+   "dE_pure": 0.0,
+   "dE_tint": null,
+   "scatter": 0.9
+  },
+  {
+   "ref": "H191",
+   "name": "シルバー",
+   "drying": 1,
+   "opacity": "不透明",
+   "dE_pure": 0.0,
+   "dE_tint": null,
+   "scatter": 0.9
+  },
+  {
+   "ref": "H181",
+   "name": "アンティークレッド",
+   "drying": 2,
+   "opacity": "半不透明",
+   "dE_pure": 0.003,
+   "dE_tint": 0.002,
+   "scatter": 0.264
+  },
+  {
+   "ref": "H183",
+   "name": "アンティークイエロー No.1",
+   "drying": 2,
+   "opacity": "半不透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.07
+  },
+  {
+   "ref": "H184",
+   "name": "アンティークイエロー No.2",
+   "drying": 2,
+   "opacity": "半不透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.023
+  },
+  {
+   "ref": "H185",
+   "name": "アンティークグリーン",
+   "drying": 2,
+   "opacity": "半不透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.055
+  },
+  {
+   "ref": "H187",
+   "name": "アンティークブルー No.1",
+   "drying": 2,
+   "opacity": "半不透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.026
+  },
+  {
+   "ref": "H188",
+   "name": "アンティークブルー No.2",
+   "drying": 2,
+   "opacity": "半不透明",
+   "dE_pure": 0.0,
+   "dE_tint": 0.0,
+   "scatter": 0.045
+  },
+  {
+   "ref": "H189",
+   "name": "アンティークブルー No.3",
+   "drying": 1,
+   "opacity": "半不透明",
+   "dE_pure": 2.291,
+   "dE_tint": 2.458,
+   "scatter": 0.02
+  },
+  {
+   "ref": null,
+   "name": "パーマネントホワイトSF",
+   "drying": null,
+   "opacity": null,
+   "dE_pure": 0.0,
+   "dE_tint": null,
+   "scatter": 1.0
+  },
+  {
+   "ref": null,
+   "name": "チタニウムホワイト",
+   "drying": null,
+   "opacity": null,
+   "dE_pure": 0.0,
+   "dE_tint": null,
+   "scatter": 1.0
+  },
+  {
+   "ref": null,
+   "name": "ジンクホワイトSF",
+   "drying": null,
+   "opacity": null,
+   "dE_pure": 0.0,
+   "dE_tint": null,
+   "scatter": 0.85
+  },
+  {
+   "ref": null,
+   "name": "アリザリンクリムソン",
+   "drying": null,
+   "opacity": null,
+   "dE_pure": 0.0,
+   "dE_tint": null,
+   "scatter": 0.06
+  }
+ ]
+}

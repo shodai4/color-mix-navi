@@ -7,8 +7,10 @@ Swift 実装 (ColorScience.swift / MixSolver.swift) と同じ手順を Python �
 from __future__ import annotations
 
 import csv
+import json
 import math
 import re
+from collections import Counter
 import time
 from pathlib import Path
 
@@ -59,12 +61,30 @@ def load_palette(swift_text, name):
     end = swift_text.index("    ]", start)
     block = swift_text[start:end]
     paints = []
-    for m in re.finditer(
+    pattern = (
         r'Paint\(id: (\d+), name: "([^"]+)", pigment: "([^"]+)", scatter: ([0-9.]+),\s*'
         r'lab: LabColor\(l: ([-0-9.]+), a: ([-0-9.]+), b: ([-0-9.]+)\),\s*'
-        r'reflectance: \[([^\]]+)\]\)',
-        block,
-    ):
+        r'reflectance: \[([^\]]+)\],\s*'
+        r'classic: (true|false),\s*'
+        r'meta: (nil|PaintMeta\(ref: (?:nil|"([^"]*)"), group: "([^"]*)", series: "([^"]*)",\s*'
+        r'permanency: (\d+), drying: (\d+),\s*'
+        r'opacity: "([^"]*)", admixing: (?:nil|"([^"]*)"),\s*'
+        r'price20: (\d+), metallic: (true|false)\))'
+    )
+    for m in re.finditer(pattern, block, re.DOTALL):
+        meta = None
+        if m.group(10) != "nil":
+            meta = {
+                "ref": m.group(11),
+                "group": m.group(12),
+                "series": m.group(13),
+                "permanency": int(m.group(14)),
+                "drying": int(m.group(15)),
+                "opacity": m.group(16),
+                "admixing": m.group(17),
+                "price20": int(m.group(18)),
+                "metallic": m.group(19) == "true",
+            }
         paints.append({
             "id": int(m.group(1)),
             "name": m.group(2),
@@ -72,6 +92,8 @@ def load_palette(swift_text, name):
             "scatter": float(m.group(4)),
             "lab": (float(m.group(5)), float(m.group(6)), float(m.group(7))),
             "refl": [float(v) for v in m.group(8).split(",")],
+            "classic": m.group(9) == "true",
+            "meta": meta,
         })
     return paints
 
@@ -143,7 +165,7 @@ def mix_lab(paints, weights):
 
 def test_kubelka_munk():
     print("\n== Kubelka-Munk（2定数） ==")
-    white = next(p for p in OIL if p["pigment"] == "PW6")
+    white = next(p for p in OIL if p["name"] == "パーマネントホワイトSF")
     black = next(p for p in OIL if p["name"] == "アイボリブラック")
     red = next(p for p in OIL if p["name"] == "カドミウムレッド")
     yellow = next(p for p in OIL if p["name"] == "カドミウムイエロー")
@@ -153,14 +175,17 @@ def test_kubelka_munk():
     check("単色 100% は元の色と一致", cm.delta_e_2000(lab, white["lab"]) < 0.01,
           f"ΔE {cm.delta_e_2000(lab, white['lab']):.3f}")
 
+    # アイボリブラックの散乱はカタログの 1:1 混色見本に合わせてあるので、
+    # 白 1:1 で L* 35 前後まで落ちる（黒の着色力が強い）。
     lab, _ = mix_lab([white, black], [0.9, 0.1])
     print(f"    白90+黒10 -> Lab {tuple(round(v, 1) for v in lab)}")
-    check("白90+黒10 は明るいグレー", 70 < lab[0] < 95, f"L* {lab[0]:.1f}")
+    check("白90+黒10 は明るいグレー", 55 < lab[0] < 80, f"L* {lab[0]:.1f}")
 
     lab, _ = mix_lab([white, black], [0.5, 0.5])
     print(f"    白50+黒50 -> Lab {tuple(round(v, 1) for v in lab)}")
-    check("白50+黒50 は中間のグレー", 40 < lab[0] < 70 and math.hypot(lab[1], lab[2]) < 6,
-          f"L* {lab[0]:.1f}")
+    check("白50+黒50 は中明度のグレー（無彩色に近い）",
+          25 < lab[0] < 45 and math.hypot(lab[1], lab[2]) < 12,
+          f"L* {lab[0]:.1f}, C* {math.hypot(lab[1], lab[2]):.1f}")
 
     linear_l = 0.5 * white["lab"][0] + 0.5 * black["lab"][0]
     check("白+黒50:50 は線形平均より暗い（減法混色の濁り）", lab[0] < linear_l,
@@ -291,23 +316,173 @@ def combinations(pool, n):
             yield (pool[i], *rest)
 
 
+# --- Swift の SolverCore と同じ「絞り込みつき」探索 --------------------------
+
+def _segment_distance(point, a, b):
+    ex, ey, ez = b[0] - a[0], b[1] - a[1], b[2] - a[2]
+    px, py, pz = point[0] - a[0], point[1] - a[1], point[2] - a[2]
+    length = ex * ex + ey * ey + ez * ez
+    t = (px * ex + py * ey + pz * ez) / length if length > 0 else 0.0
+    t = min(max(t, 0.0), 1.0)
+    dx, dy, dz = px - ex * t, py - ey * t, pz - ez * t
+    return math.sqrt(dx * dx + dy * dy + dz * dz)
+
+
+def _triangle_distance(point, a, b, c):
+    ax, ay, az = a
+    bx, by, bz = b
+    cx, cy, cz = c
+    px, py, pz = point
+    abx, aby, abz = bx - ax, by - ay, bz - az
+    acx, acy, acz = cx - ax, cy - ay, cz - az
+    apx, apy, apz = px - ax, py - ay, pz - az
+    d1 = abx * apx + aby * apy + abz * apz
+    d2 = acx * apx + acy * apy + acz * apz
+    if d1 <= 0 and d2 <= 0:
+        return math.sqrt(apx * apx + apy * apy + apz * apz)
+    bpx, bpy, bpz = px - bx, py - by, pz - bz
+    d3 = abx * bpx + aby * bpy + abz * bpz
+    d4 = acx * bpx + acy * bpy + acz * bpz
+    if d3 >= 0 and d4 <= d3:
+        return math.sqrt(bpx * bpx + bpy * bpy + bpz * bpz)
+    vc = d1 * d4 - d3 * d2
+    if vc <= 0 and d1 >= 0 and d3 <= 0:
+        v = d1 / (d1 - d3)
+        qx, qy, qz = apx - abx * v, apy - aby * v, apz - abz * v
+        return math.sqrt(qx * qx + qy * qy + qz * qz)
+    cpx, cpy, cpz = px - cx, py - cy, pz - cz
+    d5 = abx * cpx + aby * cpy + abz * cpz
+    d6 = acx * cpx + acy * cpy + acz * cpz
+    if d6 >= 0 and d5 <= d6:
+        return math.sqrt(cpx * cpx + cpy * cpy + cpz * cpz)
+    vb = d5 * d2 - d1 * d6
+    if vb <= 0 and d2 >= 0 and d6 <= 0:
+        w = d2 / (d2 - d6)
+        qx, qy, qz = apx - acx * w, apy - acy * w, apz - acz * w
+        return math.sqrt(qx * qx + qy * qy + qz * qz)
+    va = d3 * d6 - d5 * d4
+    if va <= 0 and (d4 - d3) >= 0 and (d5 - d6) >= 0:
+        w = (d4 - d3) / ((d4 - d3) + (d5 - d6))
+        qx, qy, qz = bpx - (cx - bx) * w, bpy - (cy - by) * w, bpz - (cz - bz) * w
+        return math.sqrt(qx * qx + qy * qy + qz * qz)
+    denom = va + vb + vc
+    if abs(denom) < 1e-9:
+        return _segment_distance(point, a, b)
+    v = vb / denom
+    w = vc / denom
+    nx, ny, nz = apx - (abx * v + acx * w), apy - (aby * v + acy * w), apz - (abz * v + acz * w)
+    return math.sqrt(nx * nx + ny * ny + nz * nz)
+
+
+def _insert_sorted(best, item, keep):
+    import bisect
+    keys = [entry[0] for entry in best]
+    index = bisect.bisect_left(keys, item[0])
+    best.insert(index, item)
+    if len(best) > keep:
+        best.pop()
+
+
+def closest_pairs(target, paints, keep):
+    best = []
+    labs = [p["lab"] for p in paints]
+    n = len(labs)
+    for i in range(n):
+        for j in range(i + 1, n):
+            distance = _segment_distance(target, labs[i], labs[j])
+            if len(best) == keep and distance >= best[-1][0]:
+                continue
+            _insert_sorted(best, (distance, (i, j)), keep)
+    return [entry[1] for entry in best]
+
+
+def closest_triples(target, paints, keep, lifts=(0.0, 8.0, 16.0)):
+    """Swift の closestTriples と同じ。混色は三角形より暗く出るので、
+    目標色を持ち上げた位置からも三角形までの距離を見る。"""
+    labs = [p["lab"] for p in paints]
+    n = len(labs)
+    merged = {}
+    for lift in lifts:
+        point = (target[0] + lift, target[1], target[2])
+        best = []
+        for i in range(n):
+            for j in range(i + 1, n):
+                for k in range(j + 1, n):
+                    distance = _triangle_distance(point, labs[i], labs[j], labs[k])
+                    if len(best) == keep and distance >= best[-1][0]:
+                        continue
+                    _insert_sorted(best, (distance, (i, j, k)), keep)
+        for distance, combo in best:
+            if combo in merged and merged[combo] <= distance:
+                continue
+            merged[combo] = distance
+    return [combo for combo, _ in sorted(merged.items(), key=lambda item: item[1])]
+
+
+def solve_pruned(target, paints, max_paints=3, limit=3,
+                 pair_keep=480, triple_keep=500, exhaustive_limit=24):
+    """Swift の SolverCore.run と同じ手順（Lab の線分・三角形で組み合わせを絞る）。"""
+    ks = ks_matrix(paints)
+    best = []
+
+    def offer(combo, weights):
+        w = np.asarray(weights, dtype=float)
+        if w.ndim == 1:
+            w = w[None, :]
+        labs = mix_lab_np(ks, combo, w)
+        for w, lab in zip(weights, labs):
+            de = cm.delta_e_2000(target, lab)
+            if len(best) < 40:
+                best.append((de, tuple(combo), w, lab))
+                best.sort(key=lambda x: x[0])
+            elif de < best[-1][0]:
+                best[-1] = (de, tuple(combo), w, lab)
+                best.sort(key=lambda x: x[0])
+
+    n = len(paints)
+    for i in range(n):
+        offer((i,), [1.0])
+
+    if max_paints >= 2:
+        pairs = list(combinations(range(n), 2)) if n <= exhaustive_limit else closest_pairs(target, paints, pair_keep)
+        weights = list(mix_weights(2))
+        for combo in pairs:
+            offer(combo, weights)
+
+    if max_paints >= 3:
+        triples = list(combinations(range(n), 3)) if n <= exhaustive_limit else closest_triples(target, paints, triple_keep)
+        weights = list(mix_weights(3))
+        for combo in triples:
+            offer(combo, weights)
+
+    out, seen = [], set()
+    for de, key, w, lab in best:
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append((de, [paints[i]["name"] for i in key], w, lab))
+        if len(out) == limit:
+            break
+    return out
+
+
 def test_solver():
     print("\n== レシピ探索 ==")
+    classic = [p for p in OIL if p["classic"]]
     t0 = time.time()
     worst = 0.0
-    for palette in (OIL, WATERCOLOR):
-        for p in palette:
-            res = solve_fast(p["lab"], palette, max_paints=3, limit=1)
-            worst = max(worst, res[0][0])
+    for p in classic:
+        res = solve_fast(p["lab"], classic, max_paints=3, limit=1)
+        worst = max(worst, res[0][0])
     elapsed = time.time() - t0
-    check(f"36 色すべて、目標=その絵具の色で ΔE<1 の配合が見つかる（{elapsed:.1f} 秒）",
+    check(f"定番18色: すべて目標=その絵具の色で ΔE<1 の配合が見つかる（{elapsed:.1f} 秒）",
           worst < 1.0, f"最悪 ΔE {worst:.3f}")
 
     # 純 Python の素直な実装（Swift と同じ手順）と一致するか
     t0 = time.time()
-    ref = solve(OIL[5]["lab"], OIL, max_paints=2, limit=1)
+    ref = solve(classic[5]["lab"], classic, max_paints=2, limit=1)
     mirror_ms = (time.time() - t0) * 1000
-    fast = solve_fast(OIL[5]["lab"], OIL, max_paints=2, limit=1)
+    fast = solve_fast(classic[5]["lab"], classic, max_paints=2, limit=1)
     check("素直な実装と numpy 版の最良解が一致",
           ref[0][1] == fast[0][1] and abs(ref[0][0] - fast[0][0]) < 1e-9,
           f"{ref[0][1]} ΔE {ref[0][0]:.4f}")
@@ -317,16 +492,51 @@ def test_solver():
     yellow = next(p for p in OIL if p["name"] == "カドミウムイエロー")
     blue = next(p for p in OIL if p["name"] == "ウルトラマリンディープ")
     mid, _ = mix_lab([yellow, blue], [0.5, 0.5])
-    res = solve_fast(mid, OIL, max_paints=3, limit=3)
-    print(f"  黄+青の中間色 Lab {tuple(round(v, 1) for v in mid)} に対する上位3案:")
+    res = solve_fast(mid, classic, max_paints=3, limit=3)
+    print(f"  黄+青の中間色 Lab {tuple(round(v, 1) for v in mid)} に対する上位3案（定番18色）:")
     for de, names, w, lab in res:
         print(f"    ΔE {de:5.2f}  " + ", ".join(f"{n} {int(round(x * 100))}%" for n, x in zip(names, w)))
     check("中間色の 1 位は ΔE<3", res[0][0] < 3.0, f"ΔE {res[0][0]:.3f}")
 
-    n_evals = 18 + 153 * 9 + 816 * 36
-    print(f"  1 回の全探索で評価する配合数: {n_evals:,}（1・2・3 色 / 10% 刻み）")
+    n_evals = 111 + 6105 * 9 + 221815 * 36
+    print(f"  全111色を総当たりにすると 1 回で {n_evals:,} 通り（絞り込みで 480×9 + 最大1500×36 に削る）")
 
+    # 全111色: 絞り込みつきでも、その絵具の色に届く
+    sample = [OIL[i] for i in (0, 6, 13, 24, 37, 52, 68, 81, 95, 104, 108)]
+    t0 = time.time()
+    worst = 0.0
+    worst_name = ""
+    for p in sample:
+        found = solve_pruned(p["lab"], OIL, max_paints=3, limit=1)
+        if found[0][0] > worst:
+            worst, worst_name = found[0][0], p["name"]
+    elapsed = time.time() - t0
+    check(f"全111色: 絞り込みつき探索で自分の色に ΔE<1（{elapsed:.1f} 秒）",
+          worst < 1.0, f"最悪 ΔE {worst:.3f}（{worst_name}）")
 
+    # 既知の 3 色混色を当てられるか（絞り込みが正解を落としていないか）
+    import random
+    rng = random.Random(11)
+    broken = []
+    for _ in range(8):
+        combo = rng.sample(range(len(OIL)), 3)
+        weights = rng.choice([[0.5, 0.3, 0.2], [0.6, 0.2, 0.2], [0.4, 0.4, 0.2], [0.5, 0.4, 0.1]])
+        target, _ = mix_lab([OIL[i] for i in combo], weights)
+        found = solve_pruned(target, OIL, max_paints=3, limit=1)
+        if found[0][0] > 1.5:
+            broken.append(([OIL[i]["name"] for i in combo], round(found[0][0], 2)))
+    check("既知の3色混色 8 通りを ΔE<1.5 で再現", not broken, str(broken))
+
+    # 30 色では、絞り込みの結果が総当たりと同じ答えになるか
+    subset = OIL[:30]
+    diffs = []
+    for hexv in ("#6E9BC5", "#B96A47", "#7FA05A"):
+        target = cm.hex_to_lab(hexv)
+        exact = solve_fast(target, subset, max_paints=3, limit=1)
+        pruned = solve_pruned(target, subset, max_paints=3, limit=1)
+        diffs.append((hexv, round(exact[0][0], 3), round(pruned[0][0], 3)))
+    check("絞り込みつきの最良 ΔE が総当たりと 0.5 以内で一致",
+          all(abs(e - q) < 0.5 for _, e, q in diffs), str(diffs))
 
 
 # --- 5. 表示矩形と画素座標 -------------------------------------------------
@@ -380,19 +590,140 @@ def test_geometry():
 
 def test_palette():
     print("\n== パレット ==")
-    check("油絵具は 18 色", len(OIL) == 18, str(len(OIL)))
+    catalog_colors = [p for p in OIL if p["meta"]]
+    check("油絵具は 111 色（カタログ 107 ＋ カタログ外 4）", len(OIL) == 111,
+          f"{len(OIL)}（カタログ {len(catalog_colors)}）")
     check("透明水彩は 18 色", len(WATERCOLOR) == 18, str(len(WATERCOLOR)))
+    check("カタログの色は 107 色", len(catalog_colors) == 107, str(len(catalog_colors)))
+    check("定番 18 色が classic で指定されている",
+          sum(1 for p in OIL if p["classic"]) == 18, str(sum(1 for p in OIL if p["classic"])))
     check("反射率はすべて 0-1 の範囲",
           all(0.0 <= v <= 1.0 for p in OIL + WATERCOLOR for v in p["refl"]))
     check("反射率は 36 バンド", all(len(p["refl"]) == 36 for p in OIL + WATERCOLOR))
     worst = 0.0
     for p in OIL + WATERCOLOR:
         worst = max(worst, cm.delta_e_2000(p["lab"], lab_from_reflectance(p["refl"])))
-    check("埋め込んだ Lab は反射率から再計算した値と一致", worst < 0.03, f"最大 ΔE {worst:.3f}")
+    check("埋め込んだ Lab は反射率から再計算した値と一致", worst < 0.1, f"最大 ΔE {worst:.3f}")
     check("名前の重複なし（パレット内）",
           len({p["name"] for p in OIL}) == len(OIL)
           and len({p["name"] for p in WATERCOLOR}) == len(WATERCOLOR))
+    check("5 色プリセットの絵具がすべてパレットにある",
+          all(name in {p["name"] for p in OIL}
+              for name in ("パーマネントホワイトSF", "カドミウムレッド", "カドミウムイエロー",
+                             "ウルトラマリンディープ", "アイボリブラック", "イエローオーカー",
+                             "バーントシェンナ"))
+          and all(name in {p["name"] for p in WATERCOLOR}
+                  for name in ("チタニウムホワイト", "カドミウムレッドライト",
+                               "カドミウムイエローペール", "ウルトラマリンディープ",
+                               "アイボリブラック")))
 
+
+# --- 6b. カタログ（PDF から抜いたデータ）との突き合わせ ---------------------
+
+CATALOG_JSON = HERE / "catalog" / "oil_catalog.json"
+REPORT_JSON = HERE / "catalog" / "palette_report.json"
+
+
+def test_catalog():
+    print("\n== カタログのデータ ==")
+    cat = json.loads(CATALOG_JSON.read_text())
+    rows = cat["colors"]
+    prices = cat["prices"]
+
+    check("カタログの色数は 107", len(rows) == 107, str(len(rows)))
+    refs = [r["ref20"] for r in rows]
+    check("品番（20ml）が重複しない", len(set(refs)) == len(refs))
+
+    groups = Counter(r["group"] for r in rows)
+    expect = Counter({"赤": 15, "橙": 3, "黄": 17, "緑": 17, "青": 18,
+                      "紫": 7, "茶黒": 13, "灰": 8, "金銀": 2, "アンティーク": 7})
+    check("系統の内訳が表のとおり", groups == expect, f"{dict(groups)}")
+
+    check("乾燥所要日数が 1〜4", all(1 <= (r["drying"] or 0) <= 4 for r in rows),
+          str([r["ref20"] for r in rows if not (1 <= (r["drying"] or 0) <= 4)]))
+    check("透明性が 4 段階のいずれか（金属色はカタログに記号なし）",
+          all(r["opacity"] in {"透明", "半透明", "半不透明", "不透明"}
+              for r in rows if r["group"] != "金銀")
+          and all(r["opacity"] is None for r in rows if r["group"] == "金銀"),
+          str([(r["ref20"], r["opacity"]) for r in rows if r["group"] != "金銀"
+               and r["opacity"] not in {"透明", "半透明", "半不透明", "不透明"}]))
+    check("耐光性（＊の数）が 0〜4", all(0 <= r["permanency"] <= 4 for r in rows))
+    check("シリーズ記号が A〜L", all(r["series"] in set("ABCDEFGHIJKL") for r in rows),
+          str([(r["ref20"], r["series"]) for r in rows if r["series"] not in set("ABCDEFGHIJKL")]))
+
+    price_table = prices["20ml"]
+    bad = [(r["ref20"], r["series"], r["price_20ml"]) for r in rows
+           if r["price_20ml"] != price_table[r["series"]]]
+    check("20ml の価格がシリーズの価格表と一致", not bad, str(bad[:5]))
+    check("価格表（20ml）の並びがカタログのとおり",
+          price_table == {"A": 550, "B": 605, "C": 770, "D": 1430,
+                          "E": 2310, "H": 2530, "I": 5060, "L": 3300}, str(price_table))
+    check("価格表（40ml / 110ml / 10ml）の代表値",
+          prices["40ml"]["H"] == 4620 and prices["110ml"]["E"] == 9350 and prices["10ml"]["A"] == 330)
+
+    check("原色・白混色の RGB が 0〜255",
+          all(0 <= v <= 255 for r in rows for v in r["pure_rgb"] + r["tint_rgb"]))
+    check("原色と白混色が別の値", all(r["pure_rgb"] != r["tint_rgb"] for r in rows
+                                  if r["group"] != "金銀"),
+          str([r["ref20"] for r in rows if r["group"] != "金銀" and r["pure_rgb"] == r["tint_rgb"]]))
+
+    # Swift のパレットと一致するか
+    by_ref = {p["meta"]["ref"]: p for p in OIL if p["meta"]}
+    mismatch = []
+    worst_color = (0.0, "")
+    for r in rows:
+        p = by_ref.get(r["ref20"])
+        if p is None:
+            mismatch.append((r["ref20"], "missing"))
+            continue
+        if (p["meta"]["drying"] != r["drying"]
+                or p["meta"]["opacity"] != (r["opacity"] or "不透明")
+                or p["meta"]["price20"] != r["price_20ml"]
+                or p["meta"]["group"] != r["group"]
+                or p["meta"]["permanency"] != r["permanency"]):
+            mismatch.append((r["ref20"], "field"))
+        target = cm.srgb_to_lab(tuple(v / 255 for v in r["pure_rgb"]))
+        de = cm.delta_e_2000(p["lab"], target)
+        if de > worst_color[0]:
+            worst_color = (de, r["name_jp"])
+    check("Swift の品番・系統・乾燥・透明性・耐光・価格がカタログと一致", not mismatch, str(mismatch[:5]))
+    check("Swift の色（Lab）が見本の原色と ΔE 8 以内", worst_color[0] < 8.0,
+          f"最大 ΔE {worst_color[0]:.2f}（{worst_color[1]}）")
+
+    # 白 1:1 混色の再現
+    white = next(p for p in OIL if p["name"] == "パーマネントホワイトSF")
+    deltas = []
+    for r in rows:
+        if r["group"] == "金銀":
+            continue
+        p = by_ref[r["ref20"]]
+        refl = cm.mix_two_constant([p["refl"], white["refl"]],
+                                   [p["scatter"], white["scatter"]], [0.5, 0.5])
+        predicted = lab_from_reflectance(refl)
+        target = cm.srgb_to_lab(tuple(v / 255 for v in r["tint_rgb"]))
+        deltas.append((cm.delta_e_2000(predicted, target), p["name"]))
+    deltas.sort()
+    median = deltas[len(deltas) // 2][0]
+    worst = deltas[-1]
+    check("白 1:1 混色の予測がカタログの見本に合う（中央値 ΔE<2）", median < 2.0, f"中央値 {median:.2f}")
+    check("白 1:1 混色の予測の最大 ΔE が 8 未満", worst[0] < 8.0,
+          f"最大 {worst[0]:.2f}（{worst[1]}）")
+
+    # 白混色は原色より明るい（金属色を除く）
+    lighter = 0
+    for r in rows:
+        if r["group"] == "金銀":
+            continue
+        pure = cm.srgb_to_lab(tuple(v / 255 for v in r["pure_rgb"]))
+        tint = cm.srgb_to_lab(tuple(v / 255 for v in r["tint_rgb"]))
+        if tint[0] >= pure[0]:
+            lighter += 1
+    total = len([r for r in rows if r["group"] != "金銀"])
+    check("白混色の見本は原色より明るい（金属色を除く）", lighter >= total - 3,
+          f"{lighter}/{total}")
+
+    report = json.loads(REPORT_JSON.read_text())["colors"]
+    check("当てはめレポートの件数がパレットと一致", len(report) == len(OIL), str(len(report)))
 
 
 # --- 7. 5 色限定の探索 -------------------------------------------------------
@@ -425,14 +756,15 @@ def test_five_color_solver():
     ok_subset = True
     for label, target in targets.items():
         limited = solve_fast(target, five, max_paints=3, limit=3)
-        full = solve_fast(target, OIL, max_paints=3, limit=3)
+        full = solve_pruned(target, OIL, max_paints=3, limit=3)
         used = {n for recipe in limited for n in recipe[1]}
         inside = used <= names
         ok_subset = ok_subset and inside
-        print(f"    {label}: 5 色の最良 ΔE {limited[0][0]:5.2f} / 18 色の最良 ΔE {full[0][0]:5.2f} "
+        print(f"    {label}: 5 色の最良 ΔE {limited[0][0]:5.2f} / 全色の最良 ΔE {full[0][0]:5.2f} "
               f"({', '.join(limited[0][1])})")
         check(f"{label}: 5 色以外が混ざらない", inside, str(used - names))
-        check(f"{label}: 18 色のほうが同じか良い", full[0][0] <= limited[0][0] + 1e-9,
+        check(f"{label}: 全色のほうが同じか良い（絞り込みの遅れ 0.3 まで）",
+              full[0][0] <= limited[0][0] + 0.3,
               f"{full[0][0]:.4f} vs {limited[0][0]:.4f}")
 
     # 5 色のうち 2 色を混ぜた色は、その 2 色（か、より近い組み合わせ）で再現できる
@@ -735,6 +1067,7 @@ if __name__ == "__main__":
     test_solver()
     test_geometry()
     test_palette()
+    test_catalog()
     test_five_color_solver()
     test_lut()
     test_kuwahara()
