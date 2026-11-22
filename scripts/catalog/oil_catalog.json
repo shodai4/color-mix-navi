@@ -3250,7 +3250,7 @@
    "admixing": null,
    "drying": 2,
    "opacity": "半不透明",
-   "toxicity": "コバルト",
+   "toxicity": null,
    "pigments": "",
    "pure_rgb": [
     160,
@@ -3282,7 +3282,7 @@
    "admixing": null,
    "drying": 2,
    "opacity": "半不透明",
-   "toxicity": "コバルト",
+   "toxicity": null,
    "pigments": "",
    "pure_rgb": [
     233,
@@ -3314,7 +3314,7 @@
    "admixing": null,
    "drying": 2,
    "opacity": "半不透明",
-   "toxicity": "コバルト",
+   "toxicity": null,
    "pigments": "",
    "pure_rgb": [
     175,
@@ -3346,7 +3346,7 @@
    "admixing": null,
    "drying": 2,
    "opacity": "半不透明",
-   "toxicity": "コバルト",
+   "toxicity": null,
    "pigments": "",
    "pure_rgb": [
     40,
@@ -3378,7 +3378,7 @@
    "admixing": null,
    "drying": 2,
    "opacity": "半不透明",
-   "toxicity": "コバルト",
+   "toxicity": null,
    "pigments": "",
    "pure_rgb": [
     0,
@@ -3410,7 +3410,7 @@
    "admixing": null,
    "drying": 2,
    "opacity": "半不透明",
-   "toxicity": "コバルト",
+   "toxicity": null,
    "pigments": "",
    "pure_rgb": [
     4,
@@ -3442,7 +3442,7 @@
    "admixing": null,
    "drying": 1,
    "opacity": "半不透明",
-   "toxicity": "コバルト",
+   "toxicity": null,
    "pigments": "",
    "pure_rgb": [
     28,

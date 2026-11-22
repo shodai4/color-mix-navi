@@ -184,7 +184,7 @@ def parse_table(pages):
                     drying = next(ROMAN[ch] for ch in tok if ch in ROMAN)
                 elif tok in ("N", "S") and 380 < x < 410:
                     admix = tok
-                elif "Co" in tok:
+                elif tok.strip("()") == "Co":
                     toxicity = "コバルト"
                 elif 135 <= x < 235 and (JP.search(tok) or tok.startswith("No.")):
                     if is_antique and x >= 200 and traditional is None:
