@@ -55,6 +55,70 @@ enum MixSolver {
         guard pigments.count >= 2 else { return [] }
         return SolverCore(target: target, pigments: pigments).run(maxPaints: min(max(maxPaints, 1), 3), limit: limit)
     }
+
+    /// 選んだ絵具で作れる色を、1〜3 色・10% 刻みで並べる。
+    /// 3D LUT（写真全体の色域再現）の候補になる。5 色なら 455 通り。
+    static func gamutSamples(pigments: [MixPigment]) -> [GamutSample] {
+        var samples: [GamutSample] = []
+        let count = pigments.count
+        guard count > 0 else { return samples }
+
+        let bandCount = SpectralData.weightsX.count
+        var buffer = [Double](repeating: 0, count: bandCount)
+
+        func appendSample(indices: [Int], fractions: [Double]) {
+            var scattering = 0.0
+            for (slot, index) in indices.enumerated() {
+                scattering += fractions[slot] * pigments[index].scattering
+            }
+            scattering = max(scattering, 0.0001)
+
+            for band in 0..<bandCount {
+                var absorption = 0.0
+                for (slot, index) in indices.enumerated() {
+                    absorption += fractions[slot] * pigments[index].absorption[band]
+                }
+                buffer[band] = ColorScience.reflectance(fromKS: absorption / scattering)
+            }
+
+            let lab = ColorScience.lab(fromReflectance: buffer)
+            samples.append(GamutSample(lab: lab, rgb: ColorScience.srgb(fromLab: lab).clamped))
+        }
+
+        for index in 0..<count {
+            appendSample(indices: [index], fractions: [1.0])
+        }
+
+        if count >= 2 {
+            for first in 0..<count {
+                for second in (first + 1)..<count {
+                    for step in 1...9 {
+                        let fraction = Double(step) / 10
+                        appendSample(indices: [first, second], fractions: [fraction, 1 - fraction])
+                    }
+                }
+            }
+        }
+
+        if count >= 3 {
+            for first in 0..<count {
+                for second in (first + 1)..<count {
+                    for third in (second + 1)..<count {
+                        for a in 1...8 {
+                            for b in 1...(10 - a) {
+                                let c = 10 - a - b
+                                guard c >= 1 else { continue }
+                                appendSample(indices: [first, second, third],
+                                             fractions: [Double(a) / 10, Double(b) / 10, Double(c) / 10])
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return samples
+    }
 }
 
 private struct Candidate {

@@ -23,7 +23,10 @@ struct ContentView: View {
     @State private var recipes: [MixRecipe] = []
     @State private var selectedRecipeID: Int?
     @State private var paletteKind: PaletteKind = .oil
-    @State private var pigments = MixSolver.pigments(for: PaletteData.oil)
+    @State private var palettePigments = MixSolver.pigments(for: PaletteData.oil)
+    @State private var fiveIDs = PaletteKind.oil.defaultFiveIDs
+    @State private var fivePigments = MixSolver.pigments(for: PaletteData.oil.filter { PaletteKind.oil.defaultFiveIDs.contains($0.id) })
+    @State private var limitedMode = false
     @State private var finger: CGPoint?
     @State private var isWorking = false
     @State private var loadFailed = false
@@ -31,16 +34,28 @@ struct ContentView: View {
     @State private var lastQuickLab: LabColor?
     @State private var lastQuickTime: CFTimeInterval = 0
 
+    // 仕上がりプレビュー
+    @State private var kuwaharaLevel: KuwaharaLevel?
+    @State private var gamutOn = false
+    @State private var preview: PreviewFrame?
+    @State private var isPreparingPreview = false
+    @State private var showingOriginal = false
+    @State private var lut: ColorLUT?
+    @State private var lutKey = ""
+
     var body: some View {
         GeometryReader { proxy in
             let photoHeight = proxy.size.height * 0.60
             VStack(spacing: 0) {
                 PhotoPanel(
-                    source: source,
+                    display: activePhoto,
                     sample: sample,
                     finger: finger,
                     size: CGSize(width: proxy.size.width, height: photoHeight),
                     isLoading: isWorking && source == nil,
+                    hasPreview: preview != nil,
+                    isPreparing: isPreparingPreview,
+                    showingOriginal: $showingOriginal,
                     pickerItem: $pickerItem,
                     onDrag: { location in handleDrag(location, in: CGSize(width: proxy.size.width, height: photoHeight)) },
                     onEnd: finishDrag
@@ -58,7 +73,17 @@ struct ContentView: View {
                     paletteKind: paletteKind,
                     isWorking: isWorking,
                     pro: pro,
+                    limitedMode: limitedMode,
+                    fiveIDs: fiveIDs,
+                    kuwaharaLevel: kuwaharaLevel,
+                    gamutOn: gamutOn,
+                    isPreparingPreview: isPreparingPreview,
                     onSelectPalette: changePalette,
+                    onToggleLimited: toggleLimited,
+                    onToggleFive: toggleFive,
+                    onPreset: applyPreset,
+                    onKuwahara: setKuwahara,
+                    onGamut: setGamut,
                     onSelectRecipe: { selectedRecipeID = $0 },
                     onPurchase: { Task { await pro.purchase() } }
                 )
@@ -67,6 +92,9 @@ struct ContentView: View {
         }
         .background(Color.paper.ignoresSafeArea())
         .safeAreaInset(edge: .bottom, spacing: 0) { banner }
+        .task(id: previewKey) {
+            await rebuildPreview()
+        }
         .onChange(of: pickerItem) { _, item in
             guard let item else { return }
             loadPhoto(item)
@@ -76,6 +104,32 @@ struct ContentView: View {
         } message: {
             Text("別の写真でお試しください。HEIF や RAW の一部は読み込めないことがあります。")
         }
+    }
+
+    // MARK: - 表示する写真
+
+    /// 仕上がりを見ているときは変換後の写真、それ以外は元の写真。
+    private var activePhoto: (any PhotoDisplay)? {
+        if let preview, !showingOriginal {
+            return preview
+        }
+        return source.map { $0 as any PhotoDisplay }
+    }
+
+    private struct PreviewKey: Equatable {
+        var imageID: UUID?
+        var palette: String
+        var five: [Int]
+        var kuwahara: Int
+        var gamut: Bool
+    }
+
+    private var previewKey: PreviewKey {
+        PreviewKey(imageID: source?.id,
+                   palette: paletteKind.rawValue,
+                   five: fiveIDs.sorted(),
+                   kuwahara: kuwaharaLevel?.rawValue ?? -1,
+                   gamut: gamutOn)
     }
 
     // MARK: - バナー
@@ -100,19 +154,19 @@ struct ContentView: View {
     // MARK: - スポイト
 
     private func handleDrag(_ location: CGPoint, in size: CGSize) {
-        guard let source else { return }
-        let rect = ImageGeometry.fittedRect(imageSize: source.displaySize, in: size)
+        guard let photo = activePhoto else { return }
+        let rect = ImageGeometry.fittedRect(imageSize: photo.displaySize, in: size)
         let pixel = ImageGeometry.pixelPoint(for: location,
                                              in: rect,
-                                             imageWidth: source.width,
-                                             imageHeight: source.height)
-        let lab = source.lab(x: pixel.x, y: pixel.y)
+                                             imageWidth: photo.width,
+                                             imageHeight: photo.height)
+        let lab = photo.lab(x: pixel.x, y: pixel.y)
 
         let marker = CGPoint(x: min(max(location.x, rect.minX), rect.maxX),
                              y: min(max(location.y, rect.minY), rect.maxY))
         let kept = Sample(point: marker,
                           lab: lab,
-                          color: source.displayColor(x: pixel.x, y: pixel.y),
+                          color: photo.displayColor(x: pixel.x, y: pixel.y),
                           hex: ColorScience.srgb(fromLab: lab).hexString)
 
         finger = location
@@ -126,7 +180,7 @@ struct ContentView: View {
         lastQuickLab = lab
         lastQuickTime = now
 
-        let quick = MixSolver.solve(target: lab, pigments: pigments, maxPaints: 2)
+        let quick = MixSolver.solve(target: lab, pigments: searchPigments, maxPaints: 2)
         recipes = quick
         if !quick.contains(where: { $0.id == selectedRecipeID }) {
             selectedRecipeID = quick.first?.id
@@ -140,21 +194,85 @@ struct ContentView: View {
         solve(target: sample.lab, maxPaints: 3)
     }
 
+    // MARK: - 絵具の範囲
+
+    private var searchPigments: [MixPigment] {
+        limitedMode ? fivePigments : palettePigments
+    }
+
+    private var selectedPaints: [Paint] {
+        let ids = Set(fiveIDs)
+        return paletteKind.paints.filter { ids.contains($0.id) }
+    }
+
     private func changePalette(_ kind: PaletteKind) {
         guard kind != paletteKind else { return }
         paletteKind = kind
-        pigments = MixSolver.pigments(for: kind.paints)
+        palettePigments = MixSolver.pigments(for: kind.paints)
+        fiveIDs = kind.defaultFiveIDs
+        fivePigments = MixSolver.pigments(for: kind.paints.filter { fiveIDs.contains($0.id) })
         recipes = []
         selectedRecipeID = nil
+        showingOriginal = false
         if let sample {
             solve(target: sample.lab, maxPaints: 3)
         }
     }
 
+    private func toggleLimited() {
+        limitedMode.toggle()
+        if !limitedMode {
+            gamutOn = false
+        }
+        showingOriginal = false
+        resolveAgain()
+    }
+
+    private func toggleFive(_ id: Int) {
+        if let index = fiveIDs.firstIndex(of: id) {
+            guard fiveIDs.count > 1 else { return }
+            fiveIDs.remove(at: index)
+        } else if fiveIDs.count < 5 {
+            fiveIDs.append(id)
+        } else {
+            fiveIDs.removeFirst()
+            fiveIDs.append(id)
+        }
+        fivePigments = MixSolver.pigments(for: selectedPaints)
+        showingOriginal = false
+        resolveAgain()
+    }
+
+    private func applyPreset(_ preset: PalettePreset) {
+        fiveIDs = preset.ids(in: paletteKind.paints)
+        fivePigments = MixSolver.pigments(for: selectedPaints)
+        showingOriginal = false
+        resolveAgain()
+    }
+
+    private func setKuwahara(_ level: KuwaharaLevel?) {
+        kuwaharaLevel = level
+        showingOriginal = false
+    }
+
+    private func setGamut(_ on: Bool) {
+        gamutOn = on
+        if on && !limitedMode {
+            limitedMode = true
+            resolveAgain()
+        }
+        showingOriginal = false
+    }
+
+    private func resolveAgain() {
+        guard let sample else { return }
+        solve(target: sample.lab, maxPaints: 3)
+    }
+
     private func solve(target: LabColor, maxPaints: Int) {
         solveToken += 1
         let token = solveToken
-        let pigments = self.pigments
+        let pigments = searchPigments
         isWorking = true
 
         Task.detached(priority: .userInitiated) {
@@ -169,6 +287,53 @@ struct ContentView: View {
             }
         }
     }
+
+    // MARK: - 5 色プレビュー
+
+    @MainActor
+    private func rebuildPreview() async {
+        guard let source else {
+            preview = nil
+            isPreparingPreview = false
+            return
+        }
+        let level = kuwaharaLevel
+        let wantGamut = gamutOn
+        guard level != nil || wantGamut else {
+            preview = nil
+            isPreparingPreview = false
+            return
+        }
+
+        isPreparingPreview = true
+        let paints = selectedPaints
+        let key = lutCacheKey(for: paints)
+        let cached = (key == lutKey) ? lut : nil
+
+        let result = await Task.detached(priority: .userInitiated) { () -> (ColorLUT?, PreviewFrame?) in
+            var built = cached
+            if wantGamut, built == nil {
+                let pigments = MixSolver.pigments(for: paints)
+                built = PreviewEngine.buildLUT(samples: MixSolver.gamutSamples(pigments: pigments))
+            }
+            let frame = PreviewEngine.render(source: source, level: level, lut: wantGamut ? built : nil)
+            return (wantGamut ? built : nil, frame)
+        }.value
+
+        guard !Task.isCancelled else { return }
+        if let built = result.0 {
+            lut = built
+            lutKey = key
+        }
+        preview = result.1
+        isPreparingPreview = false
+    }
+
+    private func lutCacheKey(for paints: [Paint]) -> String {
+        paletteKind.rawValue + ":" + paints.map { String($0.id) }.joined(separator: ",")
+    }
+
+    // MARK: - 写真の読み込み
 
     private func loadPhoto(_ item: PhotosPickerItem) {
         isWorking = true
@@ -188,6 +353,8 @@ struct ContentView: View {
                 recipes = []
                 selectedRecipeID = nil
                 finger = nil
+                preview = nil
+                showingOriginal = false
             }
         }
     }

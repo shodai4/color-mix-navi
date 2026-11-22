@@ -2,18 +2,33 @@ import CoreGraphics
 import SwiftUI
 import UIKit
 
+/// 画面に出している写真。元の写真（Display P3）と、変換した仕上がり（sRGB）の
+/// どちらでも同じようにスポイトできるようにする。
+protocol PhotoDisplay {
+    var displayImage: CGImage { get }
+    var width: Int { get }
+    var height: Int { get }
+    var displaySize: CGSize { get }
+    func components(x: Int, y: Int) -> RGBComponents
+    func lab(x: Int, y: Int) -> LabColor
+    func displayColor(x: Int, y: Int) -> Color
+    func crop(centerX: Int, centerY: Int, side: Int) -> CGImage?
+}
+
 /// 写真を Display P3 のビットマップに展開し、画素の色を正確に読む。
 ///
 /// UIImage の CIImage ではなく、Display P3 の CGContext に描いてから読む。
 /// 端末で撮った写真は P3 で記録されているので、sRGB に落としてから読むと
 /// 鮮やかな色ほどずれる。
-struct SampledImage {
+struct SampledImage: Identifiable, PhotoDisplay {
+    let id = UUID()
     /// 正規化済み（回転を適用済み）の P3 画像。
     let image: CGImage
     let width: Int
     let height: Int
     private let bytes: [UInt8]
 
+    var displayImage: CGImage { image }
     var displaySize: CGSize { CGSize(width: width, height: height) }
 
     init?(uiImage: UIImage) {

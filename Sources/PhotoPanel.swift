@@ -4,11 +4,14 @@ import SwiftUI
 
 /// 上部の写真エリア。ドラッグで色を拾い、指の 40pt 上にルーペを出す。
 struct PhotoPanel: View {
-    let source: SampledImage?
+    let display: (any PhotoDisplay)?
     let sample: Sample?
     let finger: CGPoint?
     let size: CGSize
     let isLoading: Bool
+    let hasPreview: Bool
+    let isPreparing: Bool
+    @Binding var showingOriginal: Bool
     @Binding var pickerItem: PhotosPickerItem?
     let onDrag: (CGPoint) -> Void
     let onEnd: () -> Void
@@ -20,10 +23,10 @@ struct PhotoPanel: View {
         ZStack {
             Color.paperDeep
 
-            if let source {
-                let rect = ImageGeometry.fittedRect(imageSize: source.displaySize, in: size)
+            if let display {
+                let rect = ImageGeometry.fittedRect(imageSize: display.displaySize, in: size)
 
-                Image(decorative: source.image, scale: 1)
+                Image(decorative: display.displayImage, scale: 1)
                     .resizable()
                     .frame(width: rect.width, height: rect.height)
                     .position(x: rect.midX, y: rect.midY)
@@ -37,8 +40,8 @@ struct PhotoPanel: View {
                     marker(sample)
                 }
 
-                loupe(source: source, rect: rect)
-                replacePicker
+                loupe(display: display, rect: rect)
+                topBar
             } else {
                 emptyState
             }
@@ -47,6 +50,53 @@ struct PhotoPanel: View {
         .clipped()
         .contentShape(Rectangle())
         .coordinateSpace(.named(Self.space))
+    }
+
+    // MARK: - 仕上がりの切り替え
+
+    private var topBar: some View {
+        VStack {
+            HStack(alignment: .top) {
+                if hasPreview {
+                    Button {
+                        showingOriginal.toggle()
+                    } label: {
+                        Text(showingOriginal ? "仕上がりを見る" : "元の写真を見る")
+                            .font(.system(size: 10, weight: .medium))
+                            .foregroundStyle(Color.ink.opacity(0.82))
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 6)
+                            .background(Capsule().fill(Color.paper.opacity(0.86)))
+                            .overlay(Capsule().strokeBorder(Color.line, lineWidth: 1))
+                    }
+                    .buttonStyle(.plain)
+                } else if isPreparing {
+                    Text("仕上がりを作成中")
+                        .font(.system(size: 10))
+                        .foregroundStyle(Color.inkSoft)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
+                        .background(Capsule().fill(Color.paper.opacity(0.86)))
+                }
+
+                Spacer(minLength: 8)
+
+                replacePicker
+            }
+
+            if showingOriginal && hasPreview {
+                Text(isPreparing ? "処理しています" : "元の写真を表示中")
+                    .font(.system(size: 10))
+                    .foregroundStyle(Color.inkSoft)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(Capsule().fill(Color.paper.opacity(0.8)))
+                    .padding(.top, 6)
+            }
+
+            Spacer()
+        }
+        .padding(12)
     }
 
     // MARK: - 写真がないとき
@@ -92,22 +142,15 @@ struct PhotoPanel: View {
     // MARK: - 写真を替える
 
     private var replacePicker: some View {
-        VStack {
-            HStack {
-                Spacer()
-                PhotosPicker(selection: $pickerItem, matching: .images, photoLibrary: .shared()) {
-                    Text("写真を替える")
-                        .font(.system(size: 11))
-                        .foregroundStyle(Color.ink.opacity(0.78))
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 6)
-                        .background(Capsule().fill(Color.paper.opacity(0.84)))
-                }
-                .buttonStyle(.plain)
-            }
-            Spacer()
+        PhotosPicker(selection: $pickerItem, matching: .images, photoLibrary: .shared()) {
+            Text("写真を替える")
+                .font(.system(size: 11))
+                .foregroundStyle(Color.ink.opacity(0.78))
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(Capsule().fill(Color.paper.opacity(0.84)))
         }
-        .padding(12)
+        .buttonStyle(.plain)
     }
 
     // MARK: - 拾った位置
@@ -125,19 +168,19 @@ struct PhotoPanel: View {
     // MARK: - ルーペ
 
     @ViewBuilder
-    private func loupe(source: SampledImage, rect: CGRect) -> some View {
+    private func loupe(display: any PhotoDisplay, rect: CGRect) -> some View {
         if let finger {
             let pixel = ImageGeometry.pixelPoint(for: finger,
                                                  in: rect,
-                                                 imageWidth: source.width,
-                                                 imageHeight: source.height)
+                                                 imageWidth: display.width,
+                                                 imageHeight: display.height)
             let radius = loupeDiameter / 2
             let x = min(max(finger.x, radius + 8), max(size.width - radius - 8, radius + 8))
             let y = max(finger.y - 40 - radius, radius + 8)
 
             Magnifier(
-                image: source.crop(centerX: pixel.x, centerY: pixel.y, side: 9),
-                hex: ColorScience.srgb(fromLab: source.lab(x: pixel.x, y: pixel.y)).hexString,
+                image: display.crop(centerX: pixel.x, centerY: pixel.y, side: 9),
+                hex: ColorScience.srgb(fromLab: display.lab(x: pixel.x, y: pixel.y)).hexString,
                 diameter: loupeDiameter
             )
             .position(x: x, y: y)

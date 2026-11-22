@@ -8,7 +8,17 @@ struct RecipePanel: View {
     let paletteKind: PaletteKind
     let isWorking: Bool
     @ObservedObject var pro: ProStore
+    let limitedMode: Bool
+    let fiveIDs: [Int]
+    let kuwaharaLevel: KuwaharaLevel?
+    let gamutOn: Bool
+    let isPreparingPreview: Bool
     let onSelectPalette: (PaletteKind) -> Void
+    let onToggleLimited: () -> Void
+    let onToggleFive: (Int) -> Void
+    let onPreset: (PalettePreset) -> Void
+    let onKuwahara: (KuwaharaLevel?) -> Void
+    let onGamut: (Bool) -> Void
     let onSelectRecipe: (Int) -> Void
     let onPurchase: () -> Void
 
@@ -29,15 +39,27 @@ struct RecipePanel: View {
                 }
 
                 paletteTabs
-                    .padding(.top, 20)
+                    .padding(.top, 18)
+
+                divider
+                    .padding(.top, 16)
+
+                fiveSection
+                    .padding(.top, 16)
+
+                divider
+                    .padding(.top, 16)
+
+                previewSection
+                    .padding(.top, 16)
 
                 if sample != nil {
                     recipesSection
-                        .padding(.top, 20)
+                        .padding(.top, 18)
                 }
 
                 proFooter
-                    .padding(.top, 24)
+                    .padding(.top, 22)
             }
             .padding(.horizontal, 22)
             .padding(.top, 16)
@@ -46,6 +68,12 @@ struct RecipePanel: View {
         }
         .scrollBounceBehavior(.basedOnSize)
         .background(Color.paper)
+    }
+
+    private var divider: some View {
+        Rectangle()
+            .fill(Color.line)
+            .frame(height: 1)
     }
 
     // MARK: - 案内
@@ -126,7 +154,7 @@ struct RecipePanel: View {
         case ..<12:
             return "色差 ΔE \(value)。明度か彩度がずれる。混ぜる量を変えてみる。"
         default:
-            return "色差 ΔE \(value)。この 18 色では届きにくい色。近い別案を見る。"
+            return "色差 ΔE \(value)。この範囲では届きにくい色。近い別案を見る。"
         }
     }
 
@@ -157,7 +185,199 @@ struct RecipePanel: View {
             Text(paletteKind.note)
                 .font(.system(size: 10))
                 .foregroundStyle(Color.inkSoft)
+                .fixedSize(horizontal: false, vertical: true)
         }
+    }
+
+    // MARK: - 5 色で作る
+
+    private var fiveSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(alignment: .center) {
+                Text("5色で作る")
+                    .font(.system(size: 11, weight: .semibold))
+                    .tracking(1)
+                    .foregroundStyle(Color.ink)
+
+                Spacer(minLength: 8)
+
+                chipButton(title: limitedMode ? "オン" : "オフ", isOn: limitedMode) {
+                    onToggleLimited()
+                }
+            }
+
+            Text("18 色のうち 5 色を選ぶと、その 5 色だけで配合を探します。")
+                .font(.system(size: 10.5))
+                .foregroundStyle(Color.inkSoft)
+                .fixedSize(horizontal: false, vertical: true)
+
+            if limitedMode {
+                HStack(spacing: 10) {
+                    ForEach(paletteKind.presets) { preset in
+                        Button {
+                            onPreset(preset)
+                        } label: {
+                            Text(preset.name)
+                                .font(.system(size: 10.5))
+                                .foregroundStyle(Color.ink.opacity(0.86))
+                                .padding(.horizontal, 9)
+                                .padding(.vertical, 5)
+                                .background(Capsule().fill(Color.white.opacity(0.6)))
+                                .overlay(Capsule().strokeBorder(Color.line, lineWidth: 1))
+                        }
+                        .buttonStyle(.plain)
+                    }
+
+                    Spacer(minLength: 4)
+
+                    Text("\(fiveIDs.count)/5")
+                        .font(.system(size: 10, design: .monospaced))
+                        .foregroundStyle(fiveIDs.count == 5 ? Color.inkSoft : Color.accent)
+                }
+
+                LazyVGrid(columns: [GridItem(.flexible(), spacing: 10),
+                                    GridItem(.flexible(), spacing: 10),
+                                    GridItem(.flexible(), spacing: 10)],
+                          spacing: 8) {
+                    ForEach(paletteKind.paints) { paint in
+                        paintCell(paint)
+                    }
+                }
+                .padding(.top, 2)
+            }
+        }
+    }
+
+    private func paintCell(_ paint: Paint) -> some View {
+        let order = fiveIDs.firstIndex(of: paint.id)
+        return Button {
+            onToggleFive(paint.id)
+        } label: {
+            HStack(spacing: 6) {
+                RoundedRectangle(cornerRadius: 2, style: .continuous)
+                    .fill(paint.swatchColor)
+                    .frame(width: 14, height: 14)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 2, style: .continuous)
+                            .strokeBorder(Color.ink.opacity(0.12), lineWidth: 1)
+                    )
+
+                Text(paint.name)
+                    .font(.system(size: 10))
+                    .foregroundStyle(order == nil ? Color.inkSoft : Color.ink)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+
+                Spacer(minLength: 0)
+
+                if let order {
+                    Text("\(order + 1)")
+                        .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                        .foregroundStyle(Color.paper)
+                        .frame(width: 14, height: 14)
+                        .background(Circle().fill(Color.ink.opacity(0.7)))
+                }
+            }
+            .padding(.horizontal, 5)
+            .padding(.vertical, 5)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                RoundedRectangle(cornerRadius: 5, style: .continuous)
+                    .fill(order == nil ? Color.white.opacity(0.28) : Color.white.opacity(0.72))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 5, style: .continuous)
+                    .strokeBorder(order == nil ? Color.line : Color.accent.opacity(0.5), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(paint.name)
+    }
+
+    // MARK: - 仕上がり
+
+    private var previewSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(alignment: .center) {
+                Text("仕上がり")
+                    .font(.system(size: 11, weight: .semibold))
+                    .tracking(1)
+                    .foregroundStyle(Color.ink)
+
+                Spacer(minLength: 8)
+
+                if isPreparingPreview {
+                    Text("作成中")
+                        .font(.system(size: 10))
+                        .foregroundStyle(Color.inkSoft)
+                }
+            }
+
+            Text("写真全体を、選んだ 5 色で塗ったらどう見えるか。元の写真とは写真の左上で切り替えられます。")
+                .font(.system(size: 10.5))
+                .foregroundStyle(Color.inkSoft)
+                .fixedSize(horizontal: false, vertical: true)
+
+            HStack(spacing: 8) {
+                chipButton(title: "面化", isOn: kuwaharaLevel != nil) {
+                    onKuwahara(kuwaharaLevel == nil ? .medium : nil)
+                }
+                chipButton(title: "5色再現", isOn: gamutOn) {
+                    onGamut(!gamutOn)
+                }
+                Spacer(minLength: 0)
+            }
+
+            if kuwaharaLevel != nil {
+                HStack(spacing: 6) {
+                    Text("面の大きさ")
+                        .font(.system(size: 10))
+                        .foregroundStyle(Color.inkSoft)
+
+                    ForEach(KuwaharaLevel.allCases) { level in
+                        Button {
+                            onKuwahara(level)
+                        } label: {
+                            Text(level.label)
+                                .font(.system(size: 10, weight: kuwaharaLevel == level ? .semibold : .regular))
+                                .foregroundStyle(kuwaharaLevel == level ? Color.ink : Color.inkSoft)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(
+                                    Capsule().fill(kuwaharaLevel == level ? Color.white.opacity(0.8) : Color.clear)
+                                )
+                                .overlay(
+                                    Capsule().strokeBorder(kuwaharaLevel == level ? Color.line : Color.clear,
+                                                           lineWidth: 1)
+                                )
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+            }
+
+            Text("面化は細部を省いて色の塊にします。5色再現と重ねると、面のまま 5 色の範囲に収まります。")
+                .font(.system(size: 10))
+                .foregroundStyle(Color.inkSoft)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    private func chipButton(title: String, isOn: Bool, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Text(title)
+                .font(.system(size: 11, weight: isOn ? .semibold : .regular))
+                .foregroundStyle(isOn ? Color.ink : Color.inkSoft)
+                .padding(.horizontal, 11)
+                .padding(.vertical, 6)
+                .background(
+                    Capsule().fill(isOn ? Color.white.opacity(0.9) : Color.white.opacity(0.3))
+                )
+                .overlay(
+                    Capsule().strokeBorder(isOn ? Color.accent.opacity(0.55) : Color.line, lineWidth: 1)
+                )
+        }
+        .buttonStyle(.plain)
     }
 
     // MARK: - レシピ
@@ -172,7 +392,7 @@ struct RecipePanel: View {
 
                 Spacer(minLength: 8)
 
-                Text(isWorking ? "計算中" : "比率は容量比")
+                Text(recipesNote)
                     .font(.system(size: 10))
                     .foregroundStyle(Color.inkSoft)
             }
@@ -192,6 +412,13 @@ struct RecipePanel: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
         }
+    }
+
+    private var recipesNote: String {
+        if isWorking {
+            return "計算中"
+        }
+        return limitedMode ? "5色の範囲" : "比率は容量比"
     }
 
     // MARK: - Pro
