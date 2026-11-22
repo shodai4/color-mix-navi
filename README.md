@@ -30,7 +30,7 @@
 | `Resources/PrivacyInfo.xcprivacy` | プライバシーマニフェスト（UserDefaults: CA92.1） |
 | `Resources/Assets.xcassets` | アプリアイコン（1024px） |
 | `scripts/ci-testflight.sh` | アーカイブ・書き出し・TestFlight アップロード |
-| `ci/*.yml` | GitHub Actions の定義（`.github/workflows/` へ置く。理由は `ci/README.md`） |
+| `ci/build-check.yml` | 署名なしのコンパイル確認（任意で設置。理由は `ci/README.md`） |
 | `scripts/*.py` | パレット生成と数値検証（下記） |
 
 ## 色の扱い
