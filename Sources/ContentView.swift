@@ -1,5 +1,6 @@
 import PhotosUI
 import SwiftUI
+import UIKit
 
 /// 写真から拾った 1 点。
 struct Sample: Identifiable {
