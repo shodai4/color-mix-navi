@@ -99,7 +99,6 @@ struct ContentView: View {
                     onToggleLimited: toggleLimited,
                     onOpenPalette: { sheet = .palette },
                     onShowPaint: { sheet = .paint($0) },
-                    onToggleFive: toggleFive,
                     onPreset: applyPreset,
                     onKuwahara: setKuwahara,
                     onGamut: setGamut,
