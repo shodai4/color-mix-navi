@@ -59,9 +59,7 @@ xcodebuild archive \
   -authenticationKeyID "$KEY_ID" \
   -authenticationKeyIssuerID "$ISSUER_ID" \
   DEVELOPMENT_TEAM="$TEAM_ID" \
-  CURRENT_PROJECT_VERSION="$BUILD_NUMBER" \
-  CODE_SIGN_STYLE=Automatic \
-  CODE_SIGN_IDENTITY="Apple Distribution"
+  CURRENT_PROJECT_VERSION="$BUILD_NUMBER"
 
 echo "== ExportOptions"
 EXPORT_OPTIONS="$RUNNER_TEMP/ExportOptions.plist"
