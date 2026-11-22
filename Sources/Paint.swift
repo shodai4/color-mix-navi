@@ -11,6 +11,9 @@ struct Paint: Identifiable, Hashable {
     let lab: LabColor
     let reflectance: [Double]
 
+    /// RGB（sRGB）。表示と外部連携用に Lab から起こす。
+    var srgb: RGBComponents { ColorScience.srgb(fromLab: lab).clamped }
+
     /// 隠ぺい力の目安。散乱係数から導く。
     var opacityLabel: String {
         if scatter >= 0.5 { return "不透明" }

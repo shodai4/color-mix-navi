@@ -22,5 +22,7 @@ extension LabColor {
 }
 
 extension Paint {
-    var swatchColor: Color { lab.displayColor }
+    var swatchColor: Color {
+        Color(.sRGB, red: srgb.r, green: srgb.g, blue: srgb.b)
+    }
 }

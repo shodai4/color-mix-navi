@@ -31,7 +31,7 @@ struct ContentView: View {
 
     var body: some View {
         GeometryReader { proxy in
-            let photoHeight = proxy.size.height * 0.58
+            let photoHeight = proxy.size.height * 0.60
             VStack(spacing: 0) {
                 PhotoPanel(
                     source: source,
