@@ -28,6 +28,8 @@ struct ContentView: View {
     @State private var isWorking = false
     @State private var loadFailed = false
     @State private var solveToken = 0
+    @State private var lastQuickLab: LabColor?
+    @State private var lastQuickTime: CFTimeInterval = 0
 
     var body: some View {
         GeometryReader { proxy in
@@ -116,7 +118,14 @@ struct ContentView: View {
         finger = location
         sample = kept
 
-        // 指を動かしている間は 2 色までで軽く回す（確定時に 3 色まで探す）
+        // 指を動かしている間は 2 色までで軽く回す（確定時に 3 色まで探す）。
+        // 画素が変わったときだけ、80ms 間隔で。
+        let now = CACurrentMediaTime()
+        let changed = lastQuickLab != lab
+        guard changed, now - lastQuickTime > 0.08 || lastQuickLab == nil else { return }
+        lastQuickLab = lab
+        lastQuickTime = now
+
         let quick = MixSolver.solve(target: lab, pigments: pigments, maxPaints: 2)
         recipes = quick
         if !quick.contains(where: { $0.id == selectedRecipeID }) {
@@ -126,6 +135,7 @@ struct ContentView: View {
 
     private func finishDrag() {
         finger = nil
+        lastQuickLab = nil
         guard let sample else { return }
         solve(target: sample.lab, maxPaints: 3)
     }
@@ -174,6 +184,7 @@ struct ContentView: View {
                 }
                 source = sampled
                 sample = nil
+                lastQuickLab = nil
                 recipes = []
                 selectedRecipeID = nil
                 finger = nil
