@@ -206,7 +206,7 @@ def swift_paint(index, item, refl, lab):
     values = ", ".join(f"{v:.4f}" for v in refl)
     return (
         f'        Paint(id: {index}, name: "{name}", pigment: "{pigment}", scatter: {SCATTER[pigment]:.2f},\n'
-        f'              lab: LabColor({lab[0]:.2f}, {lab[1]:.2f}, {lab[2]:.2f}),\n'
+        f'              lab: LabColor(l: {lab[0]:.2f}, a: {lab[1]:.2f}, b: {lab[2]:.2f}),\n'
         f'              reflectance: [{values}]),'
     )
 

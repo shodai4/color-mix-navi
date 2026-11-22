@@ -61,7 +61,7 @@ def load_palette(swift_text, name):
     paints = []
     for m in re.finditer(
         r'Paint\(id: (\d+), name: "([^"]+)", pigment: "([^"]+)", scatter: ([0-9.]+),\s*'
-        r'lab: LabColor\(([-0-9.]+), ([-0-9.]+), ([-0-9.]+)\),\s*'
+        r'lab: LabColor\(l: ([-0-9.]+), a: ([-0-9.]+), b: ([-0-9.]+)\),\s*'
         r'reflectance: \[([^\]]+)\]\)',
         block,
     ):
