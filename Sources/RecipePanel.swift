@@ -297,7 +297,7 @@ struct RecipeBar: View {
                 ForEach(entries) { entry in
                     Rectangle()
                         .fill(entry.paint.swatchColor)
-                        .frame(width: max(2, proxy.size.width * entry.fraction))
+                        .frame(width: max(2, proxy.size.width * CGFloat(entry.fraction)))
                 }
             }
             .clipShape(RoundedRectangle(cornerRadius: 2, style: .continuous))

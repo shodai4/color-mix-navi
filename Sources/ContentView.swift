@@ -96,13 +96,6 @@ struct ContentView: View {
 
     // MARK: - スポイト
 
-    private var selectedRecipe: MixRecipe? {
-        if let selectedRecipeID, let recipe = recipes.first(where: { $0.id == selectedRecipeID }) {
-            return recipe
-        }
-        return recipes.first
-    }
-
     private func handleDrag(_ location: CGPoint, in size: CGSize) {
         guard let source else { return }
         let rect = ImageGeometry.fittedRect(imageSize: source.displaySize, in: size)

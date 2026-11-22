@@ -33,7 +33,7 @@ final class ProStore: ObservableObject {
             switch result {
             case .success(let verification):
                 if case .verified(let transaction) = verification {
-                    transaction.finish()
+                    await transaction.finish()
                     setPro(true)
                     message = nil
                 } else {

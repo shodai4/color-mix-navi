@@ -30,6 +30,7 @@
 | `Resources/PrivacyInfo.xcprivacy` | プライバシーマニフェスト（UserDefaults: CA92.1） |
 | `Resources/Assets.xcassets` | アプリアイコン（1024px） |
 | `scripts/ci-testflight.sh` | アーカイブ・書き出し・TestFlight アップロード |
+| `ci/*.yml` | GitHub Actions の定義（`.github/workflows/` へ置く。理由は `ci/README.md`） |
 | `scripts/*.py` | パレット生成と数値検証（下記） |
 
 ## 色の扱い
@@ -85,7 +86,7 @@ xcodebuild build -project ColorMixNavi.xcodeproj -scheme ColorMixNavi \
 
 ## TestFlight 配信
 
-`main` へ push すると `iOS TestFlight` が `scripts/ci-testflight.sh` を実行し、アーカイブ → 書き出し → TestFlight へアップロードする。ビルド番号は `github.run_number`。
+`.github/workflows/ios-build.yml`（`ci/ios-build.yml` を設置）を置くと、`main` へ push で `iOS TestFlight` が `scripts/ci-testflight.sh` を実行し、アーカイブ → 書き出し → TestFlight へアップロードする。ビルド番号は `github.run_number`。
 
 必要なリポジトリ Secrets:
 
