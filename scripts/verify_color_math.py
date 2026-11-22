@@ -327,7 +327,55 @@ def test_solver():
 
 
 
-# --- 5. データの健全性 -----------------------------------------------------
+
+# --- 5. 表示矩形と画素座標 -------------------------------------------------
+
+def fitted_rect(image, bounds):
+    ib, bb = image, bounds
+    scale = min(bb[0] / ib[0], bb[1] / ib[1])
+    w, h = ib[0] * scale, ib[1] * scale
+    return ((bb[0] - w) / 2, (bb[1] - h) / 2, w, h)
+
+
+def pixel_point(point, rect, image):
+    rx, ry, rw, rh = rect
+    u = (point[0] - rx) / rw
+    v = (point[1] - ry) / rh
+    x = math.floor(u * image[0])
+    y = math.floor(v * image[1])
+    return (min(max(x, 0), image[0] - 1), min(max(y, 0), image[1] - 1))
+
+
+def test_geometry():
+    print("\n== 座標変換（.scaledToFit） ==")
+    cases = [
+        ((4000, 3000), (390, 500)),
+        ((3000, 4000), (390, 500)),
+        ((4000, 4000), (390, 500)),
+        ((100, 100), (390, 500)),
+    ]
+    ok = True
+    detail = []
+    for image, bounds in cases:
+        rect = fitted_rect(image, bounds)
+        corners = [
+            ((rect[0], rect[1]), (0, 0)),
+            ((rect[0] + rect[2] - 0.01, rect[1] + rect[3] - 0.01), (image[0] - 1, image[1] - 1)),
+            ((rect[0] + rect[2] / 2, rect[1] + rect[3] / 2), (image[0] // 2, image[1] // 2)),
+        ]
+        for point, expect in corners:
+            got = pixel_point(point, rect, image)
+            if got != expect:
+                ok = False
+                detail.append(f"{image}{point} -> {got} (expect {expect})")
+    check("横・縦・正方形・小さい画像で、左上/右下/中央が正しい画素に当たる", ok,
+          "; ".join(detail))
+    rect = fitted_rect((4000, 3000), (390, 500))
+    check("写真の外を触っても端の画素に丸まる",
+          pixel_point((-20, -20), rect, (4000, 3000)) == (0, 0)
+          and pixel_point((999, 999), rect, (4000, 3000)) == (3999, 2999))
+
+# --- 6. データの健全性 -----------------------------------------------------
 
 def test_palette():
     print("\n== パレット ==")
@@ -350,6 +398,7 @@ if __name__ == "__main__":
     test_delta_e()
     test_kubelka_munk()
     test_solver()
+    test_geometry()
     test_palette()
     print()
     if failures:
