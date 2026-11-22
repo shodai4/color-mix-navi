@@ -42,7 +42,10 @@ KEY_PATH="$RUNNER_TEMP/AuthKey_${KEY_ID}.p8"
 printf '%s\n' "$PRIVATE_KEY" > "$KEY_PATH"
 chmod 600 "$KEY_PATH"
 
-echo "== Archive (build $BUILD_NUMBER)"
+# アーカイブ時点でクラウド署名させる。CODE_SIGNING_ALLOWED=NO を付けると
+# GoogleMobileAds.framework など SPM の埋め込みフレームワークが未署名のまま残り、
+# アップロードで ITMS-90035 (Invalid Signature) になる。
+echo "== Archive (build $BUILD_NUMBER, cloud signing)"
 ARCHIVE="$RUNNER_TEMP/${APP_NAME}.xcarchive"
 rm -rf "$ARCHIVE"
 xcodebuild archive \
@@ -56,8 +59,7 @@ xcodebuild archive \
   -authenticationKeyID "$KEY_ID" \
   -authenticationKeyIssuerID "$ISSUER_ID" \
   DEVELOPMENT_TEAM="$TEAM_ID" \
-  CURRENT_PROJECT_VERSION="$BUILD_NUMBER" \
-  CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=""
+  CURRENT_PROJECT_VERSION="$BUILD_NUMBER"
 
 echo "== ExportOptions"
 EXPORT_OPTIONS="$RUNNER_TEMP/ExportOptions.plist"
