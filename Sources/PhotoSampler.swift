@@ -1,6 +1,7 @@
 import CoreGraphics
+import Foundation
+import ImageIO
 import SwiftUI
-import UIKit
 
 /// 画面に出している写真。元の写真（Display P3）と、変換した仕上がり（sRGB）の
 /// どちらでも同じようにスポイトできるようにする。
@@ -17,9 +18,13 @@ protocol PhotoDisplay {
 
 /// 写真を Display P3 のビットマップに展開し、画素の色を正確に読む。
 ///
-/// UIImage の CIImage ではなく、Display P3 の CGContext に描いてから読む。
+/// CIImage ではなく、Display P3 の CGContext に描いてから読む。
 /// 端末で撮った写真は P3 で記録されているので、sRGB に落としてから読むと
 /// 鮮やかな色ほどずれる。
+///
+/// 写真の向き（EXIF の Orientation）もここで一度だけ焼き込む。表示・スポイト・
+/// ルーペ・仕上がりはすべてこの 1 枚を共有するので、見えている写真と拾う色の
+/// 向き・座標は必ず一致する。
 struct SampledImage: Identifiable, PhotoDisplay {
     let id = UUID()
     /// 正規化済み（回転を適用済み）の P3 画像。
@@ -31,25 +36,32 @@ struct SampledImage: Identifiable, PhotoDisplay {
     var displayImage: CGImage { image }
     var displaySize: CGSize { CGSize(width: width, height: height) }
 
-    init?(uiImage: UIImage) {
-        // EXIF の回転を反映した UIImage を用意する（CGImage を直接描くと回らない）
-        let upright: UIImage
-        if let cgImage = uiImage.cgImage {
-            upright = UIImage(cgImage: cgImage, scale: 1, orientation: uiImage.imageOrientation)
-        } else {
-            let format = UIGraphicsImageRendererFormat.default()
-            format.scale = 1
-            format.opaque = false
-            let renderer = UIGraphicsImageRenderer(size: uiImage.size, format: format)
-            guard let rendered = renderer.image(actions: { _ in uiImage.draw(at: .zero) }).cgImage else {
-                return nil
-            }
-            upright = UIImage(cgImage: rendered, scale: 1, orientation: .up)
+    /// 写真ファイルをそのまま受け取る。向きは EXIF の値（1〜8）から決める。
+    /// UIImage の imageOrientation は使わない（UIImage 経由の描画が上下反転の
+    /// 原因だったので、ImageIO で読んで EXIF の値のまま扱う）。
+    init?(imageData: Data) {
+        guard let source = CGImageSourceCreateWithData(imageData as CFData, nil),
+              let cgImage = CGImageSourceCreateImageAtIndex(source, 0, nil) else {
+            return nil
         }
+        let properties = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [CFString: Any]
+        let exif = (properties?[kCGImagePropertyOrientation] as? NSNumber)?.uint32Value ?? 1
+        self.init(cgImage: cgImage, orientationEXIF: exif)
+    }
 
-        let pixelWidth = Int(upright.size.width.rounded())
-        let pixelHeight = Int(upright.size.height.rounded())
-        guard pixelWidth > 0, pixelHeight > 0 else { return nil }
+    /// EXIF の向き（1〜8）を焼き込んで、上向き・左上原点の P3 画像にする。
+    ///
+    /// CGContext は左下原点なので、UIImage の draw ではなく CGImage を
+    /// 変換つきで直接描く。変換は `ImageGeometry.orientationTransform` の
+    /// 表だけで決まり、描き終えた絵は「表示したときの向き」そのものになる。
+    init?(cgImage: CGImage, orientationEXIF exif: UInt32 = 1) {
+        let sourceWidth = cgImage.width
+        let sourceHeight = cgImage.height
+        guard sourceWidth > 0, sourceHeight > 0 else { return nil }
+
+        let swaps = ImageGeometry.swapsDimensions(exif: exif)
+        let pixelWidth = swaps ? sourceHeight : sourceWidth
+        let pixelHeight = swaps ? sourceWidth : sourceHeight
 
         guard let colorSpace = CGColorSpace(name: CGColorSpace.displayP3),
               let context = CGContext(
@@ -63,12 +75,15 @@ struct SampledImage: Identifiable, PhotoDisplay {
               ) else { return nil }
 
         context.interpolationQuality = .high
-        context.setFillColor(red: 1, green: 1, blue: 1, alpha: 1)
+        context.setFillColor(gray: 1, alpha: 1)
         context.fill(CGRect(x: 0, y: 0, width: pixelWidth, height: pixelHeight))
 
-        UIGraphicsPushContext(context)
-        upright.draw(in: CGRect(x: 0, y: 0, width: pixelWidth, height: pixelHeight))
-        UIGraphicsPopContext()
+        context.saveGState()
+        context.concatenate(ImageGeometry.orientationTransform(exif: exif,
+                                                              width: sourceWidth,
+                                                              height: sourceHeight))
+        context.draw(cgImage, in: CGRect(x: 0, y: 0, width: sourceWidth, height: sourceHeight))
+        context.restoreGState()
 
         guard let drawn = context.makeImage(), let data = context.data else { return nil }
         let count = pixelWidth * pixelHeight * 4
@@ -113,6 +128,37 @@ struct SampledImage: Identifiable, PhotoDisplay {
 
 /// 写真のアスペクト比を保った表示位置と、タッチ位置から画素への変換。
 enum ImageGeometry {
+
+    // MARK: - 写真の向き
+
+    /// 90 度回す向き（EXIF 5〜8）は、縦横が入れ替わる。
+    static func swapsDimensions(exif value: UInt32) -> Bool {
+        (5...8).contains(value)
+    }
+
+    /// EXIF の Orientation（1〜8）を、元画像を描くときの変換にする。
+    ///
+    /// CGContext に変換なしで描くと、画素 (i, j)（左から i 列・上から j 行）は
+    /// 左下原点のユーザー座標 (i + 0.5, 高さ - j - 0.5) に置かれる。
+    /// そこへこの変換をかけると、表示したときに EXIF の向きどおりに見える画素へ
+    /// 移る（1 は無変換、6 は時計回りに 90 度、8 は反時計回りに 90 度）。
+    /// 表そのものは scripts/verify_color_math.py が読み出して検算する。
+    static func orientationTransform(exif value: UInt32, width: Int, height: Int) -> CGAffineTransform {
+        let w = CGFloat(width)
+        let h = CGFloat(height)
+        switch value {
+        case 1: return CGAffineTransform(a: 1, b: 0, c: 0, d: 1, tx: 0, ty: 0)
+        case 2: return CGAffineTransform(a: -1, b: 0, c: 0, d: 1, tx: w, ty: 0)
+        case 3: return CGAffineTransform(a: -1, b: 0, c: 0, d: -1, tx: w, ty: h)
+        case 4: return CGAffineTransform(a: 1, b: 0, c: 0, d: -1, tx: 0, ty: h)
+        case 5: return CGAffineTransform(a: 0, b: -1, c: -1, d: 0, tx: h, ty: w)
+        case 6: return CGAffineTransform(a: 0, b: -1, c: 1, d: 0, tx: 0, ty: w)
+        case 7: return CGAffineTransform(a: 0, b: 1, c: 1, d: 0, tx: 0, ty: 0)
+        case 8: return CGAffineTransform(a: 0, b: 1, c: -1, d: 0, tx: h, ty: 0)
+        default: return .identity
+        }
+    }
+
     /// .scaledToFit と同じ配置。
     static func fittedRect(imageSize: CGSize, in bounds: CGSize) -> CGRect {
         guard imageSize.width > 0, imageSize.height > 0,

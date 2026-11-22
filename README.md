@@ -27,7 +27,7 @@
 | `Sources/RecipePanel.swift` | 色の比較、絵具の切り替え、探す範囲、5色の枠、仕上がりの操作、配合案のカード |
 | `Sources/PaletteSheet.swift` | 色を選ぶシート（検索・系統タブ）と、1色の詳細 |
 | `Sources/Paint.swift` | 絵具とカタログ情報（`PaintMeta`）、パレットの切り替え、5色プリセット |
-| `Sources/PhotoSampler.swift` | Display P3 での画素読み出し、`PhotoDisplay`（元写真と仕上がりの共通の読み口）、座標変換 |
+| `Sources/PhotoSampler.swift` | Display P3 での画素読み出し、写真の向き（EXIF）の焼き込み、`PhotoDisplay`（元写真と仕上がりの共通の読み口）、座標変換 |
 | `Sources/GamutPreview.swift` | 面化（Kuwahara）、5色の 3D LUT、写真全体の変換 |
 | `Sources/ColorScience.swift` | sRGB / Display P3 / 分光 ↔ XYZ ↔ CIELAB、CIEDE2000、K/S |
 | `Sources/MixSolver.swift` | 2定数 Kubelka-Munk の混合、配合の探索（全色では組み合わせを絞る）、5色の色域サンプル |
@@ -44,7 +44,7 @@
 
 ## 色の扱い
 
-1. **読み出し**：`PhotosPicker` で受け取った `UIImage` を、Display P3 の `CGContext` に描き直してから画素を読む。端末の写真は P3 で記録されているため、sRGB に落としてから読むと鮮やかな色ほどずれる。EXIF の回転もここで吸収する。仕上がりを出しているときは、変換後の sRGB の画素から読む（見えている色を拾う）。
+1. **読み出し**：`PhotosPicker` から受け取った写真データを `CGImageSource`（ImageIO）で開き、Display P3 の `CGContext` に描き直してから画素を読む。端末の写真は P3 で記録されているため、sRGB に落としてから読むと鮮やかな色ほどずれる。向きは EXIF の `kCGImagePropertyOrientation`（1〜8）を `ImageGeometry.orientationTransform` の変換で焼き込む。`UIImage` の `imageOrientation` と `draw` は使わない——`CGContext` は左下原点なので、UIKit の描画を混ぜると上下・左右が反転する（build 11 までの不具合）。焼き込んだ1枚を表示・スポイト・ルーペ・仕上がりが共有するので、見えている写真と拾う色の向き・座標は必ず一致する。仕上がりを出しているときは、変換後の sRGB の画素から読む（見えている色を拾う）。
 2. **座標**：`.scaledToFit` の表示矩形を自前で計算し、タッチ位置 → 画素座標を変換する（`ImageGeometry`）。
 3. **Lab**：Display P3 → リニア RGB（sRGB と同じ伝達関数）→ XYZ（D65）→ CIELAB。行列と白色点は CIE の定義値。
 4. **混色**：各絵具のマスストーン反射率から K/S を出し、散乱係数 S を掛けて吸収 K とする。混合は K と S を別々に線形結合し、`K/S` から反射率を戻す（2定数 Kubelka-Munk）。白の散乱が強いことを表現できるので、白で淡くした色が暗く転ばない。
@@ -95,7 +95,7 @@ python3 scripts/generate_icon.py           # Resources/.../AppIcon.png
 python3 scripts/verify_color_math.py       # 数値検証
 ```
 
-`verify_color_math.py` は Swift 実装と同じ式を Python で書き直して突き合わせる。直近の結果（2026-11-22、build 9）:
+`verify_color_math.py` は Swift 実装と同じ式を Python で書き直して突き合わせる。直近の結果（2026-11-22、build 12、98項目すべて合格）:
 
 | 項目 | 結果 |
 | --- | --- |
@@ -119,6 +119,8 @@ python3 scripts/verify_color_math.py       # 数値検証
 | 色域外の純色（緑・マゼンタ・青・シアン） | 彩度が下がり、色域の内側に収まる |
 | 面化 | 一様な面は不変、エッジは中間色を作らず、ムラが減る |
 | 面化＋5色再現 | 出力はすべて5色の混色そのもの |
+| 写真の向き（EXIF 1〜8） | Swift の変換表を読み出して描き、8通りすべて表示の向きと一致（縦横の入れ替えも） |
+| 向きとタップ | どの向きでも、表示の中央を触ると元画像の中央の画素を拾う |
 
 Swift 側はこの環境に Xcode がないため、数値は上記の 1:1 ミラーで確認し、コンパイルは GitHub Actions で確認する。
 
@@ -130,7 +132,7 @@ xcodebuild build -project ColorMixNavi.xcodeproj -scheme ColorMixNavi \
   -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO
 ```
 
-`CURRENT_PROJECT_VERSION` は CI が `github.run_number` で上書きする。build 9 がカタログ全色・色の詳細・全色対応の探索の版。
+`CURRENT_PROJECT_VERSION` は CI が `github.run_number` で上書きする。build 12 が写真の向き（EXIF）を焼き込む修正の版（build 9 がカタログ全色・色の詳細・全色対応の探索）。
 
 ## TestFlight 配信
 

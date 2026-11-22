@@ -586,6 +586,146 @@ def test_geometry():
           pixel_point((-20, -20), rect, (4000, 3000)) == (0, 0)
           and pixel_point((999, 999), rect, (4000, 3000)) == (3999, 2999))
 
+
+# --- 5b. 写真の向き（EXIF Orientation） -------------------------------------
+
+def swift_orientation_transforms():
+    """PhotoSampler.swift の変換表をそのまま読み出す（Swift と Python を同じ 1 つの表で検算する）。"""
+    text = (ROOT / "Sources" / "PhotoSampler.swift").read_text()
+    pattern = re.compile(
+        r"case (\d+): return CGAffineTransform\(a: (-?\d+), b: (-?\d+), c: (-?\d+), "
+        r"d: (-?\d+), tx: ([wh0-9.]+), ty: ([wh0-9.]+)\)")
+    table = {}
+    for m in pattern.finditer(text):
+        exif = int(m.group(1))
+        table[exif] = (int(m.group(2)), int(m.group(3)), int(m.group(4)), int(m.group(5)),
+                       m.group(6), m.group(7))
+    return table
+
+
+def swift_swaps_dimensions():
+    text = (ROOT / "Sources" / "PhotoSampler.swift").read_text()
+    m = re.search(r"\((\d+)\.\.\.(\d+)\)\.contains\(value\)", text)
+    return (int(m.group(1)), int(m.group(2))) if m else None
+
+
+def resolved(transform, w, h):
+    a, b, c, d, tx, ty = transform
+    lookup = {"w": w, "h": h}
+    return (float(a), float(b), float(c), float(d),
+            float(lookup.get(tx, tx)), float(lookup.get(ty, ty)))
+
+
+def draw_normalized(src, transform, swaps):
+    """CGBitmapContext に CGImage を変換つきで描いた結果を作る。
+
+    - バッファは左上原点（先頭の行が絵の上）。CGImage も同じ並びで表示される。
+    - ユーザー座標は左下原点（CGContext の既定）。変換がないとき、画素 (i, j)
+      （左から i 列・上から j 行）はユーザー座標 (i + 0.5, 高さ - j - 0.5) に置かれる。
+    """
+    h, w = src.shape
+    dst_h, dst_w = (w, h) if swaps else (h, w)
+    a, b, c, d, tx, ty = resolved(transform, w, h)
+    out = np.full((dst_h, dst_w), -1, dtype=int)
+    for j in range(h):
+        for i in range(w):
+            x, y = i + 0.5, h - j - 0.5
+            dx = a * x + c * y + tx
+            dy = b * x + d * y + ty
+            col = math.floor(dx)
+            device_row = math.floor(dy)          # 下から数えた行
+            out[dst_h - 1 - device_row, col] = src[j, i]
+    return out
+
+
+def displayed_shape(src, exif):
+    """EXIF の向きで表示したときの絵（独立した定義: 回転・反転の合成）。"""
+    if exif == 1:
+        return src.copy()
+    if exif == 2:
+        return np.fliplr(src)                    # 左右反転
+    if exif == 3:
+        return np.rot90(src, 2)                  # 180°
+    if exif == 4:
+        return np.flipud(src)                    # 上下反転
+    if exif == 5:
+        return np.transpose(src)                 # 主対角で折り返す（転置）
+    if exif == 6:
+        return np.rot90(src, -1)                 # 時計回りに 90°
+    if exif == 7:
+        return np.rot90(np.fliplr(src), -1)      # 左右反転＋時計回りに 90°（反転）
+    if exif == 8:
+        return np.rot90(src, 1)                  # 反時計回りに 90°
+    raise ValueError(exif)
+
+
+def test_orientation():
+    print("\n== 写真の向き（EXIF Orientation） ==")
+    transforms = swift_orientation_transforms()
+    check("変換表に EXIF 1〜8 がすべてある", sorted(transforms) == list(range(1, 9)),
+          f"{sorted(transforms)}")
+
+    swaps_range = swift_swaps_dimensions()
+    check("縦横が入れ替わる向きは 5〜8", swaps_range == (5, 8), str(swaps_range))
+
+    # 元画像の画素に「どの画素か」が分かる番号を入れて、向きごとの結果を照合する。
+    samples = [np.arange(15).reshape(3, 5), np.arange(28).reshape(7, 4)]
+    for exif in range(1, 9):
+        swaps = swaps_range[0] <= exif <= swaps_range[1]
+        ok = True
+        detail = []
+        for src in samples:
+            got = draw_normalized(src, transforms[exif], swaps)
+            want = displayed_shape(src, exif)
+            if got.shape != want.shape or not np.array_equal(got, want):
+                ok = False
+                detail.append(f"{src.shape} -> {got.shape}（期待 {want.shape}）")
+        check(f"EXIF {exif}: 描いた絵が表示の向きと一致", ok, "; ".join(detail))
+
+    # 左上の画素がどこへ行くか（向きの意味そのものの確認）
+    corners = {1: "left-top", 2: "right-top", 3: "right-bottom", 4: "left-bottom",
+               5: "left-top", 6: "right-top", 7: "right-bottom", 8: "left-bottom"}
+    corner_errors = []
+    for exif, expect in corners.items():
+        src = np.zeros((3, 5), dtype=int)
+        src[0, 0] = 1
+        swaps = swaps_range[0] <= exif <= swaps_range[1]
+        got = np.argwhere(draw_normalized(src, transforms[exif], swaps) == 1)[0]
+        h, w = got
+        label = ("left" if w == 0 else "right") + "-" + ("top" if h == 0 else "bottom")
+        if label != expect:
+            corner_errors.append(f"EXIF {exif}: {label}（期待 {expect}）")
+    check("左上の画素が、EXIF の意味どおりの角へ行く", not corner_errors, "; ".join(corner_errors))
+
+    # 端末の写真の実寸: 縦で撮った 1 枚（記録は横 4032×3024・EXIF 6）
+    portrait = draw_normalized(np.zeros((3024, 4032), dtype=int), transforms[6], True)
+    check("縦で撮った写真（4032×3024・EXIF 6）は 3024×4032 の縦になる",
+          portrait.shape == (4032, 3024), str(portrait.shape))
+    rect = fitted_rect((portrait.shape[1], portrait.shape[0]), (390, 500))
+    check("その写真は縦長の枠に合う（左右に余白が出る）",
+          rect[3] > rect[2] and abs(rect[3] - 500) < 1e-9, f"{rect}")
+
+    # 表示の中央を触ると、向きに関係なく元画像の中央の画素を拾う
+    centre_errors = []
+    for exif in range(1, 9):
+        swaps = swaps_range[0] <= exif <= swaps_range[1]
+        src = np.arange(15).reshape(3, 5)
+        got = draw_normalized(src, transforms[exif], swaps)
+        dh, dw = got.shape
+        r = fitted_rect((dw, dh), (390, 500))
+        x, y = pixel_point((r[0] + r[2] / 2, r[1] + r[3] / 2), r, (dw, dh))
+        if got[y, x] != src[1, 2]:
+            centre_errors.append(f"EXIF {exif}: {got[y, x]}（期待 {src[1, 2]}）")
+    check("表示の中央を触ると、どの向きでも元画像の中央の画素を拾う", not centre_errors,
+          "; ".join(centre_errors))
+
+    # 直した原因そのものの見張り: UIImage の draw（上下反転の原因）を経由しない
+    text = (ROOT / "Sources" / "PhotoSampler.swift").read_text()
+    check("向きは CGImage と EXIF の値で焼き込み、UIImage の draw を使わない",
+          "UIGraphicsPushContext" not in text and "UIImage(" not in text
+          and "context.draw(cgImage" in text)
+
+
 # --- 6. データの健全性 -----------------------------------------------------
 
 def test_palette():
@@ -1066,6 +1206,7 @@ if __name__ == "__main__":
     test_kubelka_munk()
     test_solver()
     test_geometry()
+    test_orientation()
     test_palette()
     test_catalog()
     test_five_color_solver()

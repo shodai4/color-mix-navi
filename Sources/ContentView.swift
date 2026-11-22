@@ -376,8 +376,7 @@ struct ContentView: View {
         isWorking = true
         Task {
             let data = try? await item.loadTransferable(type: Data.self)
-            let decoded = data.flatMap { UIImage(data: $0) }
-            let sampled = decoded.flatMap { SampledImage(uiImage: $0) }
+            let sampled = data.flatMap { SampledImage(imageData: $0) }
             await MainActor.run {
                 isWorking = false
                 guard let sampled else {
